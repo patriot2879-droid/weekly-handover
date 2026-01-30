@@ -4532,5 +4532,20 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+
+<script>
+// Publisher buttons bootstrap (ensures handlers are attached after the DOM exists)
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    if (typeof wirePublisherButtons === "function") wirePublisherButtons();
+    if (typeof updatePublisherUI === "function") updatePublisherUI();
+    if (typeof updateWeekModeUI === "function") updateWeekModeUI();
+  } catch (e) {
+    console.error("Publisher bootstrap error:", e);
+    alert("Publisher buttons failed to initialise. Open DevTools Console for details.");
+  }
+});
+</script>
+
 </body>
 </html>

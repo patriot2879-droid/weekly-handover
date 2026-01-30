@@ -1,0 +1,4447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Weekly Handover — E.ON</title>
+<style>
+
+
+
+:root{
+  --bg:#fbfdff; --panel:#fff; --accent:#d71920; --muted:#556066; --text:#0f1720; --grid:#e6ecf1;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,#ffffff,#f6fbff);color:var(--text)}
+header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 16px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  background-color: red; /* <-- Add this line */
+}
+.brand{display:flex;align-items:center;gap:12px}.logo{height:44px}.title {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff; /* make white */
+}
+
+.tag {
+  font-size: 12px;
+  color: #fff; /* make white */
+}
+.controls{display:flex;gap:8px;align-items:center}.smallBtn{padding:6px 8px;border-radius:6px;border:1px solid var(--grid);background:#fff;cursor:pointer}.fileBtnLike{padding:6px 12px;border-radius:2px;border:1px solid #8f8f8f;background:#f3f3f3;color:#000;cursor:pointer;font-size:13px;font-family:inherit;line-height:1.2;box-shadow:inset 0 1px 0 rgba(255,255,255,.7);}.fileBtnLike:hover{background:#e9e9e9}.fileBtnLike:active{background:#dedede;box-shadow:inset 0 2px 3px rgba(0,0,0,.15)}
+.container{display:flex;min-height:calc(100vh - 72px)}
+nav{width:300px;padding:12px;border-right:1px solid rgba(0,0,0,0.06);background:rgba(255,255,255,0.98);position:sticky;left:0;top:72px;height:calc(100vh - 72px);overflow:auto}
+nav button{display:block;width:100%;margin:6px 0;padding:10px;border-radius:6px;border:1px solid var(--grid);background:#fff;text-align:left;cursor:pointer}
+.colorGrid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.colorSw{width:30px;height:30px;border-radius:6px;border:1px solid var(--grid);cursor:pointer;display:inline-block}
+.content{flex:1;padding:14px;overflow:auto}.panel{background:var(--panel);padding:12px;border-radius:8px;border:1px solid var(--grid);margin-bottom:12px}
+.dates{display:flex;gap:8px;margin-bottom:10px}.date{flex:1;padding:8px;border-radius:6px;text-align:center;border:1px solid transparent;font-weight:600}.date.mon{background:#f0f4f6;border:1px solid var(--grid)}
+.tableWrap{overflow:auto;border:1px solid var(--grid);border-radius:8px;background:#fff}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid var(--grid);padding:6px;vertical-align:top;text-align:left;font-size:13px}
+thead th{background:linear-gradient(180deg,#f7fbff,#fff);position:sticky;top:0;z-index:2}
+.leftCol{width:210px}.rightCol{width:220px}
+.inputcell{width:100%;border:none;padding:4px;background:transparent}
+.tooltip{position:relative;display:inline-block}.tooltip .tip{position:absolute;left:0;top:100%;background:#fff;border:1px solid var(--grid);padding:6px;border-radius:6px;white-space:nowrap;display:none;z-index:50;box-shadow:0 3px 8px rgba(0,0,0,0.12)}.tooltip:hover .tip{display:block}
+.cmIcon{float:right;font-size:14px;margin-left:6px;cursor:pointer;color:#556;opacity:0.95}
+.hidden{display:none}.contextMenu{position:fixed;background:#fff;border:1px solid var(--grid);box-shadow:0 6px 18px rgba(0,0,0,0.12);z-index:4000;padding:6px;border-radius:6px}
+.jobBadge{display:inline-block;padding:4px 6px;border-radius:4px;color:#fff;font-weight:600}.job-agreed{background:#0b8a4f}.job-cancel{background:#c62828}
+.footer{padding:8px 16px;color:var(--muted);font-size:13px}
+.formRow{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.smallInput{padding:6px;border:1px solid var(--grid);border-radius:6px}
+.noteRow{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.noteLeft{width:35%;border-right:1px solid var(--grid);padding-right:8px}
+.noteRight{flex:1}
+.controlsRight{display:flex;gap:8px;align-items:center}
+.filterRow{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.tick{color:green;font-weight:800;margin-left:6px}
+.statusCell{display:flex;align-items:center;gap:6px}
+.colLabel{font-size:12px;color:var(--muted);margin-bottom:6px}
+.leftFixedBarHeader{font-weight:700;margin-bottom:6px}
+.colorMode{display:flex;gap:6px;align-items:center;margin-top:8px}
+.smallSw{width:22px;height:22px;border-radius:4px;border:1px solid var(--grid);cursor:pointer;display:inline-block}
+/* existing styles */
+.cellText{min-height:18px;outline:none}
+/* Editable VL table cells styles */
+#importVLTableBody td[contenteditable="true"] {
+  padding: 6px;
+  min-width: 80px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  cursor: text;
+}
+
+#importVLTableBody td[contenteditable="true"]:hover {
+  background-color: #f0f8ff;
+  border-color: #b0d4f1;
+}
+
+#importVLTableBody td[contenteditable="true"]:focus {
+  background-color: #fff;
+  border-color: #1e88e5;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.1);
+}
+
+#importVLTableBody td[contenteditable="true"][data-edited="true"] {
+  background-color: #fff8e1;
+  border-left: 3px solid #ff9800;
+}
+
+
+/* Container for the entire list: vertical stacking of engineers */
+#rotaEngineersList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* Each engineer row: horizontal layout for name + boxes */
+.engineer-row {
+  display: flex;
+  align-items: center;
+}
+
+/* Style for engineer name on the left (fixed width) */
+.engineer-name {
+  width: 200px; /* fixed width for names */
+  font-weight: bold;
+}
+
+/* Style for each box, arranged horizontally across */
+.engineer-box {
+  width: 100px !important;   /* wider horizontally */
+  height: 20px !important;   /* thinner vertically */
+  border: 1px solid var(--grid);
+  border-radius: 4px;
+  background-color: #fff;
+  margin-left: 8px; /* spacing from name */
+  flex-shrink: 0; /* prevent shrinking */
+  display: inline-block;
+}
+
+
+/* Style for each engineer row: horizontal layout for name + boxes */
+.engineer-row {
+  display: flex;
+  align-items: center; /* vertically align items */
+}
+
+/* Style for engineer name on the left (fixed width) */
+.engineer-name {
+  width: 200px; /* fixed width for names */
+  font-weight: bold;
+}
+
+/* Style for the 4 boxes to the right */
+.engineer-box {
+  width: 50px;
+  height: 50px;
+  border: 1px solid var(--grid);
+  border-radius: 4px;
+  background-color: #fff;
+  margin-left: 8px; /* spacing from name */
+  cursor: pointer; /* optional */
+}
+
+/* Admin gets its own scroll area */
+.admin-scroll {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+#adminFixedBar {
+  position: fixed;
+  top: 72px;               /* below your red header */
+  left: 300px;             /* width of your nav */
+  right: 0;
+  background: #fff;
+  z-index: 1000;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--grid);
+}
+
+.admin-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+section.hidden #adminFixedBar {
+  display: none;
+}
+
+/* Push admin content down so it doesn't hide under bar */
+#admin {
+  padding-top: 90px;
+}
+
+
+
+/* ===== Import VL: horizontal + vertical scroll wrapper and sticky header ===== */
+#vlTableWrapper{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:auto;
+  max-height:60vh;
+  border:1px solid var(--grid);
+  border-radius:8px;
+  background:#fff;
+}
+#importvl table{min-width:1600px;}
+#importvl th, #importvl td{white-space:nowrap;}
+#importvl thead th{
+  position:sticky;
+  top:0;
+  background:linear-gradient(180deg,#f7fbff,#fff);
+  z-index:2;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60" role="img" aria-label="E.ON logo">
+  <rect width="220" height="60" fill="#ff0000"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="28" fill="#ffffff" font-weight="700">E.ON</text>
+</svg>
+    <div>
+      <div class="title">Weekly Handover</div>
+      <div class="tag">Efficient Complex Planning, Seamless Handover</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="prevWeek" class="fileBtnLike" title="Previous week">&larr;</button>
+    <input id="mondayPicker" type="date" aria-label="Pick Monday" />
+    <button id="nextWeek" class="fileBtnLike" title="Next week">&rarr;</button>
+    <div style="padding-left:10px;font-weight:600" id="wcLabel"></div>
+    <div class="controlsRight" style="margin-left:12px">
+      <button id="saveBtn" class="fileBtnLike" title="Save now">Save</button>
+      <button id="chaseAllBtn" class="fileBtnLike" title="Chase all pending jobs">Chase All</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <nav>
+    <button data-tab="main">Weekly Handover</button>
+    <button data-tab="jobs">Jobs Agreed / Cancelled</button>
+    <button data-tab="addjob">Add New Job</button>
+    <button data-tab="capacity">Capacity</button>
+    <button data-tab="Cmhandover">CM Handover</button>
+    <button data-tab="notes">Notes</button>
+    <button data-tab="rota">Rota</button>
+    <button data-tab="replans">Replans</button>
+    <button data-tab="admin">Admin</button>
+
+    <!-- Reports Dropdown -->
+<div class="dropdown" style="display:inline-block; margin-right:8px;">
+  <button class="dropbtn" id="reportsBtn">Reports</button>
+  <div class="dropdown-content" id="reportsDropdown">
+    <button data-tab="workissue">Work Issue</button>
+    <button data-tab="importvl">Import VL</button>
+    <button data-tab="availability">No Availability</button>
+    <button data-tab="cancellations">Cancellations</button>
+  </div>
+</div>
+
+
+
+
+    <hr style="margin:10px 0"/>
+
+    <div class="leftFixedBarHeader">Colour selection</div>
+
+    <div class="colLabel">Mode</div>
+    <div class="colorMode">
+      <label><input type="radio" name="colorMode" value="bg" checked> Background</label>
+      <label><input type="radio" name="colorMode" value="text"> Text</label>
+    </div>
+
+    <div style="margin-top:8px">
+      <div class="colLabel">Custom</div>
+      <input type="color" id="colorPicker" title="Pick colour" class="smallInput" value="#ffffff" />
+      <button id="clearColor" class="fileBtnLike" title="Clear colour on selected cell">Clear</button>
+    </div>
+
+    <div style="margin-top:10px">
+      <div class="colLabel">Favourite swatches (click to set)</div>
+      <div id="favSwatches" class="colorGrid" aria-hidden="true"></div>
+      <div style="margin-top:8px">
+        <div style="font-size:13px;color:var(--muted)">Quick swatches</div>
+        <div style="margin-top:6px">
+          <span class="smallSw" data-c="#d71920" style="background:#d71920"></span>
+          <span class="smallSw" data-c="#0b8a4f" style="background:#0b8a4f"></span>
+          <span class="smallSw" data-c="#1e88e5" style="background:#1e88e5"></span>
+          <span class="smallSw" data-c="#8e24aa" style="background:#8e24aa"></span>
+          <span class="smallSw" data-c="#000000" style="background:#000"></span>
+          <span class="smallSw" data-c="#ff9800" style="background:#ff9800"></span>
+          <span class="smallSw" data-c="#ff69b4" style="background:#ff69b4"></span>
+          <span class="smallSw" data-c="#ffffff" style="background:#fff;border:1px solid #ddd"></span>
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin:10px 8px"/>
+    <div style="font-size:13px;color:var(--muted)">Quick actions</div>
+    <div style="margin-top:8px">
+      <button id="exportCSV" class="fileBtnLike">Export Week CSV</button>
+      <button id="clearWeekBtn" class="fileBtnLike" title="Clear all day cells for this week">Clear Week</button>
+    </div>
+  </nav>
+
+  <main class="content">
+    <!-- MAIN -->
+    <section id="main" class="panel">
+      <div id="datesRow" class="dates"></div>
+
+      <div class="filterRow">
+        <div style="display:flex;gap:6px;align-items:center">
+          <div class="colLabel">Filter Engineer</div>
+          <select id="filterEngineer" class="smallInput">
+  <option value="">(All)</option>
+  <option value="az">A–Z</option>
+</select>
+        </div>
+
+        <div style="display:flex;gap:6px;align-items:center">
+          <div class="colLabel">Filter By FTL</div>
+          <select id="filterStream" class="smallInput"><option value="">(All)</option></select>
+        </div>
+
+<div style="display:flex;gap:6px;align-items:center"> 
+  <div class="colLabel">Filter Planned Area</div>
+
+  <select id="filterPlannedArea" class="smallInput">
+      <option value="">(All)</option>
+      <option value="az">A–Z</option>
+  </select>
+</div>
+
+        <div style="display:flex;gap:6px;align-items:center">
+          <div class="colLabel">Filter Status</div>
+          <select id="filterStatus" class="smallInput"><option value="">(All)</option><option value="pending">Pending</option><option value="agreed">Agreed</option><option value="cancelled">Cancelled</option></select>
+        </div>
+        <div style="margin-left:auto">
+          <button id="resetFilters" class="fileBtnLike">Reset filters</button>
+        </div>
+      </div>
+
+      <div class="tableWrap" style="max-height:58vh;overflow:auto">
+        <table id="mainTable" role="grid">
+          <thead>
+            <tr>
+              <th class="leftCol">Engineer</th><th>Home P/Code</th><th>Skills</th><th>FTL</th>
+              <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th>
+              <th class="rightCol">Planned Area</th><th>Hotel Location</th><th>Info</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyEngineers"></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:10px">
+        <h4>Jobs Agreed / Cancelled (this week's moved items)</h4>
+        <div id="jobsSummary"></div>
+      </div>
+    </section>
+
+    <!-- JOBS AGREED/CANCELLED -->
+    <section id="jobs" class="panel hidden" aria-hidden="true">
+      <h3>Jobs Agreed / Cancelled</h3>
+      <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <label style="font-weight:600">
+          Paper Job:
+          <select id="paperJobFilter" class="smallInput" style="margin-left:6px">
+            <option value="">All</option>
+            <option value="paper">Paper</option>
+            <option value="nonpaper">Non-paper</option>
+          </select>
+        </label>
+      </div>
+
+      <table id="jobsAC" style="margin-top:10px;width:100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Postcode</th>
+      <th>MPAN</th>
+      <th>Requestor</th>
+      <th>Job Type</th>
+      <th>Date Agreed</th>
+      <th>Notes</th>
+      <th>Status</th>
+      <th>Paper Job</th>
+      <th>Chased</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+</section>
+
+    <!-- ADD NEW JOB -->
+    <section id="addjob" class="panel hidden" aria-hidden="true">
+      <h3>Add New Job</h3>
+      <form id="newJobForm">
+        <div class="formRow">
+          <label>Name:<br><select id="jobEngineer" class="smallInput"></select></label>
+          <label>Date:<br><input id="jobDate" type="date" class="smallInput"></label>
+          <label>Postcode:<br><input id="jobPost" class="smallInput"></label>
+          <label>MPAN:<br><input id="jobMpan" class="smallInput"></label>
+          <label>Requestor:<br><input id="jobRequestor" class="smallInput"></label>
+          <label>Job Type:<br><input id="jobType" class="smallInput"></label>
+        </div>
+        <div style="margin-top:8px" class="formRow">
+          <label>Date Agreed:<br><input id="jobDateAgreed" type="date" class="smallInput"></label>
+                    <label>Status:<br>
+            <select id="jobStatus" class="smallInput">
+              <option value="pending">Pending</option>
+              <option value="agreed">Raised</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </label>
+          <label style="flex:1">Notes:<br><input id="jobNotes" class="smallInput" style="width:100%"></label>
+        </div>
+        <div style="margin-top:8px; display:flex; align-items:center; gap:12px;">
+  <label style="display:flex; align-items:center; gap:6px; font-weight:600;">
+    <input type="checkbox" id="paperJobCheckbox">
+    Paper Job
+  </label>
+
+  <button type="submit" id="saveJobBtn" class="fileBtnLike">Save Job</button>
+</div>
+      </form>
+    </section>
+
+
+
+<!-- CM Handover -->
+<section id="Cmhandover" class="panel hidden" aria-hidden="true">
+  <h3>CM Handover (Info)</h3>
+
+  <div class="controls" style="margin-bottom:15px">
+    <button id="cmPrevWeek" class="fileBtnLike" title="Previous week">&larr;</button>
+    <input id="cmMondayPicker" type="date" aria-label="Pick Monday" />
+    <button id="cmNextWeek" class="fileBtnLike" title="Next week">&rarr;</button>
+    <div id="cmWcLabel" style="padding-left:10px;font-weight:600"></div>
+  </div>
+
+  <div class="cm-cards">
+    <div class="cm-card"><div class="cm-card-title">CM Handover W/C</div><textarea id="cm_wc" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Total Jobs Issued</div><textarea id="cm_jobsIssued" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Total Jobs Capacity Reserved</div><textarea id="cm_capacityReserved" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Total MTs on Deployment</div><textarea id="cm_mtsDeployment" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Total MTs on COP4</div><textarea id="cm_mtsCop4" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Bulk Jobs</div><textarea id="cm_bulkJobs" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Gary Must</div><textarea id="cm_garyMust" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Additional Info</div><textarea id="cm_additionalInfo" class="cm-card-input"></textarea></div>
+    <div class="cm-card"><div class="cm-card-title">Planned By</div><textarea id="cm_plannedBy" class="cm-card-input"></textarea></div>
+  </div>
+</section>
+
+<!-- ROTA -->
+<section id="rota" class="panel hidden" aria-hidden="true">
+  <h3>Rota</h3>
+  <!-- Week selection -->
+  <div style="margin-bottom: 10px;">
+    <label for="weekSelect" class="colLabel">Select Week:</label>
+    <select id="weekSelect" class="smallInput">
+      
+      <option value="">Select a week...</option>
+      <option value="main">Main Rota</option>
+      <option value="week1">Week 1</option>
+      <option value="week2">Week 2</option>
+      <option value="week3">Week 3</option>
+      <option value="week4">Week 4</option>
+    </select>
+  </div>
+
+
+<div id="mainContent" class="week-content" style="display:none; margin-top:20px;">
+  <h4>Main Rota</h4>
+  <!-- Your main rota content here -->
+  <!-- Container for the 4 boxes -->
+  <div id="week1Boxes" style="display:none; margin-top:10px; gap:10px; display:flex;">
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">Main Box 1</div>
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">Main Box 2</div>
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">Main Box 3</div>
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">Main Box 4</div>
+  </div>
+</div>
+</script>
+
+<!-- Week 1 Content -->
+<div id="week1Content" class="week-content" style="display:none; margin-top:20px;">
+  <h4>Week 1 Details</h4>
+  <!-- Container for the 4 boxes -->
+  <div id="week1Boxes" style="display:flex; gap:10px; margin-top:10px;">
+    <!-- Box 1: date input -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox1" 
+        placeholder="dd/mm/yyyy" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+        pattern="\d{2}/\d{2}/\d{4}"
+        title="Enter date as dd/mm/yyyy"
+      />
+    </div>
+    <!-- Box 2 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox2" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 3 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox3" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 4 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox4" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Week 2 Content -->
+  <div id="week2Content" class="week-content" style="display:none; margin-top:20px;">
+    <h4>Week 2 Details</h4>
+  <!-- Container for the 4 boxes -->
+   <div id="week2Boxes" style="display:flex; gap:10px; margin-top:10px;">
+    <!-- Box 5: date input -->
+<div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox5" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 6 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox6" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 7 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox7" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 8 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox8" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+  </div>
+</div>
+
+  <!-- Week 3 Content -->
+  <div id="week3Content" class="week-content" style="display:none; margin-top:20px;">
+    <h4>Week 3 Details</h4>
+  <!-- Container for the 4 boxes -->
+   <div id="week3Boxes" style="display:flex; gap:10px; margin-top:10px;">
+    <!-- Box 9: date input -->
+<div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox9" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 10 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox10" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 11 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox11" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 12 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox12" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+  </div>
+</div>
+
+  <!-- Week 4 Content -->
+  <div id="week4Content" class="week-content" style="display:none; margin-top:20px;">
+    <h4>Week 4 Details</h4>
+  <!-- Container for the 4 boxes -->
+   <div id="week4Boxes" style="display:flex; gap:10px; margin-top:10px;">
+    <!-- Box 13: date input -->
+<div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox13" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 14 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox14" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 15 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox15" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+    <!-- Box 16 -->
+    <div style="width:100px; height:50px; background:#dde; display:flex; align-items:center; justify-content:center;">
+      <input 
+        type="text" 
+        id="dateBox16" 
+        readonly 
+        placeholder="+" 
+        style="width:98px; height:30px; text-align:center; border:1px solid #999; border-radius:4px;"
+      />
+    </div>
+  </div>
+</div>
+
+  <!-- Add the engineer list container below -->
+  <div id="rotaEngineersList" style="width:100%; max-width:100%; border:1px solid var(--grid); padding:8px; margin-top:10px; overflow-x:auto;">
+    <!-- Dynamic engineer names will appear here, each on a separate line -->
+  </div>
+
+  <!-- Existing content area for week info -->
+  <div id="rotaContent" style="margin-top:10px;"> <!-- Content based on the selected week can go here --> </div>
+</section>
+
+<!-- Add this JavaScript right after the <select> element or just before the closing </section> -->
+<script>
+  document.getElementById('weekSelect').addEventListener('change', function() {
+    const selectedWeek = this.value;
+    // Hide all week contents
+    document.querySelectorAll('.week-content').forEach(div => {
+      div.style.display = 'none';
+    });
+    // Show the selected week content
+    if (selectedWeek) {
+      const weekDiv = document.getElementById(selectedWeek + 'Content');
+      if (weekDiv) {
+        weekDiv.style.display = 'block';
+      }
+    }
+  });
+</script>
+
+<style>
+.cm-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.cm-card {
+  background: #fff;
+  border: 1px solid var(--grid);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+.cm-card-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+.cm-card-input {
+  width: 100%;
+  border: 1px solid var(--grid);
+  border-radius: 6px;
+  padding: 6px;
+  resize: vertical;
+  min-height: 40px;
+  font-family: inherit;
+}
+</style>
+<style>
+  /* ... your existing styles ... */
+
+  /* Add these dropdown styles at the end of your style block: */
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropbtn {
+    background-color: #4CAF50; /* or your preferred color */
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    margin-top: 2px;
+    border-radius: 4px;
+  }
+
+  /* Show dropdown on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* Style links inside dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+</style>
+<script>
+(function() {
+  const storageKey = 'cmHandoverByDate';
+  let dataByDate = {};
+
+  const section = document.getElementById('Cmhandover');
+  const prevBtn = document.getElementById('cmPrevWeek');
+  const nextBtn = document.getElementById('cmNextWeek');
+  const mondayInput = document.getElementById('cmMondayPicker');
+  const label = document.getElementById('cmWcLabel');
+
+  // Textareas
+  const textareas = {
+    cm_wc: document.getElementById('cm_wc'),
+    cm_jobsIssued: document.getElementById('cm_jobsIssued'),
+    cm_capacityReserved: document.getElementById('cm_capacityReserved'),
+    cm_mtsDeployment: document.getElementById('cm_mtsDeployment'),
+    cm_mtsCop4: document.getElementById('cm_mtsCop4'),
+    cm_bulkJobs: document.getElementById('cm_bulkJobs'),
+    cm_garyMust: document.getElementById('cm_garyMust'),
+    cm_additionalInfo: document.getElementById('cm_additionalInfo'),
+    cm_plannedBy: document.getElementById('cm_plannedBy')
+  };
+
+  let currentMonday;
+
+  function loadFromStorage() {
+     const raw = localStorage.getItem(storageKey);
+     if (raw) {
+       try { dataByDate = JSON.parse(raw); } catch (e) { dataByDate = {}; }
+     }
+  }
+
+  function getDateKey(d) {
+     const dd = new Date(d);
+     const yyyy = dd.getFullYear();
+     const mm = String(dd.getMonth() + 1).padStart(2, '0');
+     const day = String(dd.getDate()).padStart(2, '0');
+     return `${yyyy}-${mm}-${day}`;
+  }
+
+  function formatDate(d) {
+     const date = new Date(d);
+     const yyyy = date.getFullYear();
+     const mm = String(date.getMonth() + 1).padStart(2, '0');
+     const dd = String(date.getDate()).padStart(2, '0');
+     return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function getMonday(d) {
+     const date = new Date(d);
+     const day = (date.getDay() + 6) % 7; // 0 = Monday
+     date.setDate(date.getDate() - day);
+     date.setHours(0,0,0,0);
+     return date;
+  }
+
+  function loadDate(dateObj) {
+     const key = getDateKey(dateObj);
+     const data = dataByDate[key] || {};
+     textareas.cm_wc.value = data.cm_wc || '';
+     textareas.cm_jobsIssued.value = data.cm_jobsIssued || '';
+     textareas.cm_capacityReserved.value = data.cm_capacityReserved || '';
+     textareas.cm_mtsDeployment.value = data.cm_mtsDeployment || '';
+     textareas.cm_mtsCop4.value = data.cm_mtsCop4 || '';
+     textareas.cm_bulkJobs.value = data.cm_bulkJobs || '';
+     textareas.cm_garyMust.value = data.cm_garyMust || '';
+     textareas.cm_additionalInfo.value = data.cm_additionalInfo || '';
+     textareas.cm_plannedBy.value = data.cm_plannedBy || '';
+     if (label) label.textContent = `W/C starting ${key}`;
+     if (mondayInput) mondayInput.value = key;
+  }
+
+  function saveCurrentDateData() {
+     const key = getDateKey(currentMonday);
+     const payload = {
+        cm_wc: textareas.cm_wc.value,
+        cm_jobsIssued: textareas.cm_jobsIssued.value,
+        cm_capacityReserved: textareas.cm_capacityReserved.value,
+        cm_mtsDeployment: textareas.cm_mtsDeployment.value,
+        cm_mtsCop4: textareas.cm_mtsCop4.value,
+        cm_bulkJobs: textareas.cm_bulkJobs.value,
+        cm_garyMust: textareas.cm_garyMust.value,
+        cm_additionalInfo: textareas.cm_additionalInfo.value,
+        cm_plannedBy: textareas.cm_plannedBy.value
+     };
+     dataByDate[key] = payload;
+     localStorage.setItem(storageKey, JSON.stringify(dataByDate));
+  }
+
+  function updateUI() {
+     if (mondayInput) mondayInput.value = formatDate(currentMonday);
+     if (label) label.textContent = `W/C starting ${formatDate(currentMonday)}`;
+  }
+
+  // Initialize storage and current Monday
+  loadFromStorage();
+  currentMonday = getMonday(new Date());
+
+  // If a date is pre-selected, use that as the starting Monday
+  if (mondayInput && mondayInput.value) {
+     const d = new Date(mondayInput.value);
+     currentMonday = getMonday(d);
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', () => {
+     saveCurrentDateData();
+     currentMonday.setDate(currentMonday.getDate() - 7);
+     updateUI();
+     loadDate(currentMonday);
+  });
+
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+     saveCurrentDateData();
+     currentMonday.setDate(currentMonday.getDate() + 7);
+     updateUI();
+     loadDate(currentMonday);
+  });
+
+  if (mondayInput) {
+     mondayInput.addEventListener('change', () => {
+        saveCurrentDateData();
+        const v = mondayInput.value;
+        if (v) {
+           const d = new Date(v);
+           currentMonday = getMonday(d);
+           updateUI();
+           loadDate(currentMonday);
+        }
+     });
+  }
+
+  // Optional: save on blur for all fields
+  Object.values(textareas).forEach(el => {
+     if (el) el.addEventListener('blur', saveCurrentDateData);
+  });
+
+  // Initialize display and load data for the starting date
+  updateUI();
+  loadDate(currentMonday);
+})();
+</script>
+
+<!-- EXPORT --> 
+<section id="export" class="panel hidden" aria-hidden="true">
+  <h3>Export / Paste Excel data</h3>
+
+  <p>Paste CSV text copied from Excel below (headers accepted). 
+     Click Parse and then Import to add to this week's jobs.</p>
+
+  <textarea id="pasteCsv" rows="8" style="width:100%;"></textarea>
+
+  <div style="margin-top:8px">
+    <button id="parseCsv" class="fileBtnLike">Parse CSV</button>
+    <button id="importCsv" class="fileBtnLike">Import to Week Jobs</button>
+  </div>
+
+  <!-- CSV PREVIEW WITH HEADERS -->
+<div id="csvPreview" 
+     style="margin-top:10px;max-height:220px;overflow:auto;border:1px solid var(--grid);padding:8px">
+
+  <table style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr style="background:#f0f0f0;">
+        <th>Allocated To</th>
+        <th>MPAN</th>
+        <th>P/Code</th>
+        <th>Job Type Description</th>
+        <th>Date</th>
+        <th>T/Band</th>
+        <th>Additional Information</th>
+      </tr>
+    </thead>
+
+    <tbody id="csvPreviewBody"></tbody>
+  </table>
+
+</div>
+
+
+  <hr style="margin:12px 0"/>
+
+  <div>
+    <h4>Export format (rows)</h4>
+    <p>
+      Exported rows are: 
+      <strong>Allocated To — MP/AN — P/Code — Job Type Description — Date — T/Band — Additional Information</strong>
+    </p>
+    <button id="exportRowsBtn" class="fileBtnLike">Export Rows CSV</button>
+  </div>
+</section>
+
+<!-- WORK ISSUE -->
+<section id="workissue" class="panel hidden" aria-hidden="true">
+  <h3>Work Issue - (Future Jobs Report)</h3>
+
+  <div style="margin:10px 0; display:flex; gap:10px; align-items:center;">
+      
+<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+  <input type="file" id="workIssueExcel" accept=".xlsx,.xls,.csv">
+  <button id="importWorkIssueBtn" type="button">Import</button>
+  <a href="https://eonos.sharepoint.com/:x:/r/sites/ComplexPlanningTeam/Shared%20Documents/General/Steves%20folder/Import_VL_Master.xlsx?d=w4c13f3acd91d4927a8db8ad5e10f57db&csf=1&web=1&e=oraz38" target="_blank" class="fileBtnLike" style="text-decoration:none;">Open Import VL Master</a>
+  <a href="https://eonos.sharepoint.com/:f:/r/sites/ComplexPlanningTeam/Shared%20Documents/General/Steves%20folder?csf=1&web=1&e=WreKog" target="_blank" class="fileBtnLike" style="text-decoration:none;">Open Steve’s folder</a>
+  <button id="workIssueInstructionsBtn" type="button" class="fileBtnLike">Instructions</button>
+</div>
+
+
+  </div>
+
+<!-- DATE FILTERS -->
+<div style="margin:10px 0; display:flex; gap:12px; align-items:center;">
+    <label>From:
+      <input type="date" id="wiDateFrom">
+    </label>
+
+    <label>To:
+      <input type="date" id="wiDateTo">
+    </label>
+
+    <button id="wiApplyDateFilter" class="fileBtnLike">Apply Date Filter</button>
+<button id="wiClearDateFilter" class="fileBtnLike">Clear</button>
+
+
+
+<label>
+  Email Type:
+  <select id="emailTemplateSelect" class="smallInput">
+    <option value="">Select email type</option>
+    <option value="CM_WEEK_1">CM Week 1 Work Preview</option>
+    <option value="CM_WEEKLY">CM Weekly Work Issue</option>
+    <option value="JM_DAILY">JM Daily Work Issue File</option>
+    <option value="JM_MONDAY">JM Monday Work Issue File</option>
+    <option value="JM_WEEKEND">JM Weekend Work Issue File</option>
+  </select>
+</label>
+
+<label>
+  Engineer:
+  <select id="engineerFilter"
+          multiple
+          size="6"
+          class="smallInput"
+          onchange="applyFilters()">
+  </select>
+</label>
+
+<button id="emailEngineersBtn" class="fileBtnLike">
+  Email Selected
+</button>
+
+
+</div>
+
+  <!-- Work Issue Table -->
+  <table id="workIssueTable" style="width:100%; border-collapse:collapse;">
+      <thead>
+          <tr style="background:#eee;">
+              <th data-sort="allocated">Allocated To</th>
+              <th data-sort="mpan">MP/AN</th>
+              <th data-sort="postcode">P/Code</th>
+              <th data-sort="job">Job Type Description</th>
+              <th data-sort="date">Date</th>
+              <th data-sort="band">T/Band</th>
+              <th data-sort="info">Additional Information</th>
+          </tr>
+      </thead>
+      <tbody id="workIssueBody"></tbody>
+  </table>
+ </section>
+
+
+<script>
+
+const emailTemplates = {
+  CM_WEEK_1: () =>
+    `Hi,
+
+Below you can find a preview of your work for next week.
+
+Please utilise this only as a reference point to book your hotels if you are out of patch, and to order any additional stock or special equipment required during the week.
+
+This is not your final schedule and is subject to change.
+
+`,
+
+  CM_WEEKLY: () =>
+    `Hi,
+
+Please see below an overview of your work Tuesday to Friday.
+
+Your final schedule will be emailed to you the day before the appointments are due to take place.
+
+If you are working out of area can you please reply "To All" with the location of your hotel.
+
+`,
+
+  JM_DAILY: () =>
+    `Hi,
+
+Please find below your daily work issues.
+
+`,
+
+  JM_MONDAY: () =>
+    `Hi,
+
+Please find below your Monday work issues.
+
+`,
+
+  JM_WEEKEND: () =>
+    `Hi,
+
+Please find below your weekend work issues.
+
+`
+};
+
+
+/* ===== Work Issue import guard ===== */
+let workIssueImported = false;
+
+/* ===== Import button handler ===== */
+document.getElementById("importWorkIssueBtn").addEventListener("click", async () => {
+
+  // 🛑 guard MUST be first
+  if (workIssueImported) return;
+  workIssueImported = true;
+
+  const importBtn = document.getElementById("importWorkIssueBtn");
+  const originalBtnText = importBtn.textContent;
+
+  try {
+    importBtn.disabled = true;
+    importBtn.textContent = "Importing…";
+
+    const fileInput = document.getElementById("workIssueExcel");
+    if (!fileInput.files.length) {
+      alert("Select a file first.");
+      return;
+    }
+
+    // ✅ REQUIRE From/To for speed (30k-row master is too slow otherwise)
+    const fromVal = document.getElementById("wiDateFrom")?.value || "";
+    const toVal = document.getElementById("wiDateTo")?.value || "";
+    if (!fromVal || !toVal) {
+      alert("Set BOTH From and To dates first (this keeps import fast), then click Import.");
+      return;
+    }
+
+    const fromTS = new Date(fromVal + "T00:00:00").getTime();
+    const toTS = new Date(toVal + "T23:59:59").getTime();
+
+    const file = fileInput.files[0];
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+
+    // ==========================================
+    // HARD-WIRED REQUIRED HEADERS (7 columns)
+    // ==========================================
+    const REQUIRED = [
+      "Allocated To",
+      "MP/AN",
+      "P/Code",
+      "Job Type Description",
+      "Date",
+      "T/Band",
+      "Additional Information"
+    ];
+
+    // Allow a few synonyms (but we always OUTPUT the REQUIRED order)
+    const CANDIDATES = {
+      "Allocated To": ["Allocated To", "OperativeName", "Operative Name", "AllocatedTo"],
+      "MP/AN": ["MP/AN", "MPAN", "MPXN"],
+      "P/Code": ["P/Code", "Postcode", "Post Code", "PCode"],
+      "Job Type Description": ["Job Type Description", "JobDesc", "Job Desc", "Job Type", "JobTypeDescription"],
+      "Date": ["Date", "ApptDate", "Appointment Date", "Appt Date"],
+      "T/Band": ["T/Band", "TimeSlot", "Time Slot", "T Band", "TimeBand"],
+      "Additional Information": ["Additional Information", "Comments", "Additional Info", "Info"]
+    };
+
+    function normaliseHeader(h) {
+      return (h || "").toString().trim().replace(/\s+/g, " ").toLowerCase();
+    }
+
+    function buildHeaderIndex(headers) {
+      const norm = headers.map(normaliseHeader);
+      const map = {};
+      const missing = [];
+
+      for (const req of REQUIRED) {
+        const cand = (CANDIDATES[req] || [req]).map(normaliseHeader);
+        let found = -1;
+        for (const c of cand) {
+          found = norm.indexOf(c);
+          if (found !== -1) break;
+        }
+        if (found === -1) missing.push(req);
+        else map[req] = found;
+      }
+
+      return { map, missing };
+    }
+
+    // Excel serial conversion
+    function excelSerialToDate(n) {
+      return new Date((n - 25569) * 86400 * 1000);
+    }
+
+    function appendRow(tbody, frag, engineerSet, values, d) {
+      const tr = document.createElement("tr");
+      tr.dataset.engineer = values[0] || "";
+      tr.dataset.date = (d && !isNaN(d)) ? d.getTime() : "";
+
+      for (const v of values) {
+        const td = document.createElement("td");
+        td.textContent = v;
+        tr.appendChild(td);
+      }
+
+      if (values[0]) engineerSet.add(values[0]);
+      frag.appendChild(tr);
+    }
+
+    const tbody = document.getElementById("workIssueBody");
+    tbody.innerHTML = "";
+    window.engineerSet = new Set();
+    const frag = document.createDocumentFragment();
+
+    let imported = 0;
+
+    // ==========================================
+    // FAST CSV PATH (recommended)
+    // ==========================================
+    if (ext === "csv") {
+      const text = await file.text();
+
+      // Use SheetJS to parse CSV robustly (handles quoted commas)
+      const wb = XLSX.read(text, { type: "string" });
+      const sh = wb.Sheets[wb.SheetNames[0]];
+      const aoa = XLSX.utils.sheet_to_json(sh, { header: 1, defval: "", blankrows: false });
+
+      if (!aoa.length) {
+        alert("CSV looks empty.");
+        return;
+      }
+
+      const headers = aoa[0];
+      const { map, missing } = buildHeaderIndex(headers);
+      if (missing.length) {
+        alert("Wrong file. Missing required headers:\n\n" + missing.join("\n") +
+              "\n\nRequired headers are:\n" + REQUIRED.join(" | "));
+        return;
+      }
+
+      for (let r = 1; r < aoa.length; r++) {
+        const row = aoa[r] || [];
+
+        const allocated = (row[map["Allocated To"]] || "").toString().trim();
+        const mpan = (row[map["MP/AN"]] || "").toString().trim();
+        const pcode = (row[map["P/Code"]] || "").toString().trim();
+        const job = (row[map["Job Type Description"]] || "").toString().trim();
+        const band = (row[map["T/Band"]] || "").toString().trim();
+        const info = (row[map["Additional Information"]] || "").toString().trim();
+
+        const rawDate = row[map["Date"]];
+        let d = null;
+
+        if (rawDate) {
+          if (rawDate instanceof Date) d = rawDate;
+          else if (typeof rawDate === "number") d = excelSerialToDate(rawDate);
+          else d = new Date(rawDate);
+        }
+
+        if (!d || isNaN(d)) continue;
+        const ts = d.getTime();
+        if (ts < fromTS || ts > toTS) continue;
+
+        const dateDisplay = d.toLocaleDateString("en-GB");
+        appendRow(tbody, frag, window.engineerSet, [allocated, mpan, pcode, job, dateDisplay, band, info], d);
+        imported++;
+      }
+
+      tbody.appendChild(frag);
+      if (typeof populateEngineerDropdown === "function") populateEngineerDropdown();
+
+      alert(`Imported ${imported} rows (CSV).`);
+      return;
+    }
+
+    // ==========================================
+    // XLSX PATH (will be slower on large files)
+    // ==========================================
+    const data = await file.arrayBuffer();
+
+    const workbook = XLSX.read(data, { cellDates: true, cellNF: false, cellText: false });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    // Allow up to 60k rows so 30k row files are not chopped
+    const MAX_ROWS = 60000;
+    if (sheet["!ref"]) {
+      const range = XLSX.utils.decode_range(sheet["!ref"]);
+      if (range.e.r > MAX_ROWS) range.e.r = MAX_ROWS;
+      sheet["!ref"] = XLSX.utils.encode_range(range);
+    }
+
+    const aoa = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", blankrows: false });
+    if (!aoa.length) {
+      alert("Excel sheet appears empty.");
+      return;
+    }
+
+    const headers = aoa[0];
+    const { map, missing } = buildHeaderIndex(headers);
+    if (missing.length) {
+      alert("Wrong file. Missing required headers:\n\n" + missing.join("\n") +
+            "\n\nRequired headers are:\n" + REQUIRED.join(" | "));
+      return;
+    }
+
+    for (let r = 1; r < aoa.length; r++) {
+      const row = aoa[r] || [];
+
+      const allocated = (row[map["Allocated To"]] || "").toString().trim();
+      const mpan = (row[map["MP/AN"]] || "").toString().trim();
+      const pcode = (row[map["P/Code"]] || "").toString().trim();
+      const job = (row[map["Job Type Description"]] || "").toString().trim();
+      const band = (row[map["T/Band"]] || "").toString().trim();
+      const info = (row[map["Additional Information"]] || "").toString().trim();
+
+      const rawDate = row[map["Date"]];
+      let d = null;
+
+      if (rawDate) {
+        if (rawDate instanceof Date) d = rawDate;
+        else if (typeof rawDate === "number") d = excelSerialToDate(rawDate);
+        else d = new Date(rawDate);
+      }
+
+      if (!d || isNaN(d)) continue;
+      const ts = d.getTime();
+      if (ts < fromTS || ts > toTS) continue;
+
+      const dateDisplay = d.toLocaleDateString("en-GB");
+      appendRow(tbody, frag, window.engineerSet, [allocated, mpan, pcode, job, dateDisplay, band, info], d);
+      imported++;
+    }
+
+    tbody.appendChild(frag);
+    if (typeof populateEngineerDropdown === "function") populateEngineerDropdown();
+
+    alert(`Imported ${imported} rows.`);
+
+  } catch (error) {
+    console.error("Work Issue import error:", error);
+    alert("Import failed. For 30,000+ rows, exporting Engineer_Snapshot as CSV is the fastest option.");
+  } finally {
+    workIssueImported = false;
+    const importBtn = document.getElementById("importWorkIssueBtn");
+    importBtn.disabled = false;
+    importBtn.textContent = originalBtnText;
+  }
+});
+// Sorting
+document.querySelectorAll("#workIssueTable th").forEach(th => {
+    th.addEventListener("click", () => {
+        const table = th.closest("table");
+        const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        const index = Array.from(th.parentNode.children).indexOf(th);
+
+        const sorted = rows.sort((a, b) =>
+            a.children[index].innerText.localeCompare(b.children[index].innerText)
+        );
+
+        tbody.innerHTML = "";
+        sorted.forEach(r => tbody.appendChild(r));
+    });
+});
+
+/* ===== DATE FILTER (PASTE HERE) ===== */
+const applyBtn = document.getElementById("wiApplyDateFilter");
+const clearBtn = document.getElementById("wiClearDateFilter");
+
+applyBtn.addEventListener("click", applyFilters);
+
+clearBtn.addEventListener("click", () => {
+  document.getElementById("wiDateFrom").value = "";
+  document.getElementById("wiDateTo").value = "";
+  applyFilters();
+});
+
+// helper – date formatting for email subject
+function formatDateDDMMYYYY(dateStr) {
+  if (!dateStr) return "Any";
+  const [y, m, d] = dateStr.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+// ===== Helper: get Monday key (YYYY-MM-DD) for any date =====
+function getMondayKeyFromDate(d) {
+  const date = new Date(d);
+  if (isNaN(date)) return null;
+  const day = (date.getDay() + 6) % 7; // 0=Mon
+  date.setDate(date.getDate() - day);
+  date.setHours(0,0,0,0);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function getWeekKeysForRange(fromVal, toVal) {
+  // If no dates chosen, fall back to the currently selected week
+  if (!fromVal && !toVal) return [currentWeekKey];
+
+  const start = fromVal ? new Date(fromVal) : new Date(toVal);
+  const end = toVal ? new Date(toVal + "T23:59:59") : new Date(fromVal + "T23:59:59");
+  if (isNaN(start) || isNaN(end)) return [currentWeekKey];
+
+  // walk Mondays from start-week to end-week
+  const keys = [];
+  let curKey = getMondayKeyFromDate(start);
+  if (!curKey) return [currentWeekKey];
+
+  let cur = new Date(curKey);
+  const endKey = getMondayKeyFromDate(end) || curKey;
+
+  while (true) {
+    keys.push(getMondayKeyFromDate(cur));
+    if (getMondayKeyFromDate(cur) === endKey) break;
+    cur.setDate(cur.getDate() + 7);
+  }
+  return Array.from(new Set(keys)).filter(Boolean);
+}
+
+function getEngineerNoteForWeek(engineerName, weekKey) {
+  const week = store.weeks?.[weekKey];
+  if (!week || !Array.isArray(week.engineers)) return "";
+  const idx = week.engineers.findIndex(e => e.name === engineerName);
+  if (idx === -1) return "";
+  const note = week.notes?.[idx] || "";
+  return String(note).trim();
+}
+
+
+document.getElementById("emailEngineersBtn").addEventListener("click", () => {
+
+  const fromVal = document.getElementById("wiDateFrom").value;
+  const toVal = document.getElementById("wiDateTo").value;
+
+  const fromTxt = formatDateDDMMYYYY(fromVal);
+  const toTxt = formatDateDDMMYYYY(toVal);
+
+  // Visible rows only
+  const rows = Array.from(
+    document.querySelectorAll("#workIssueBody tr")
+  ).filter(r => r.style.display !== "none");
+
+  if (rows.length === 0) {
+    alert("No visible rows to email.");
+    return;
+  }
+
+  // Group rows by engineer
+  const rowsByEngineer = {};
+  rows.forEach(row => {
+    const eng = row.dataset.engineer;
+    if (!rowsByEngineer[eng]) rowsByEngineer[eng] = [];
+    rowsByEngineer[eng].push(row);
+  });
+
+  const templateKey =
+    document.getElementById("emailTemplateSelect")?.value;
+
+  if (!templateKey) {
+    alert("Please select an Email Type.");
+    return;
+  }
+
+
+
+
+  // Send ONE email per engineer
+  Object.entries(rowsByEngineer).forEach(([engineerName, engRows]) => {
+
+    const engineer = store.masterEngineers.find(e => e.name === engineerName);
+    if (!engineer || !engineer.email) return;
+
+    const subject =
+      `Work Issues ${fromTxt} to ${toTxt} – ${engineerName}`;
+
+    const divider = "-".repeat(60);
+    let body =
+  (emailTemplates[templateKey]?.() || "") +
+  "\n";
+
+    // ===== ENGINEER NOTES (from Notes tab - date ranges) =====
+    const noteHits = getNotesOverlappingRange(engineerName, fromVal, toVal);
+    if (noteHits.length) {
+      body += "-".repeat(60) + "\n";
+      body += "NOTES:\n";
+      noteHits.forEach(n => {
+        body += `${n.from} to ${n.to}:\n`;
+        body += `${n.text}\n\n`;
+      });
+      body += "-".repeat(60) + "\n\n";
+    }
+
+
+engRows.forEach(row => {
+      const c = row.cells;
+
+      body += `${divider}\n`;
+      body += `Allocated To : ${c[0].innerText}\n`;
+      body += `MPAN         : ${c[1].innerText}\n`;
+      body += `Postcode     : ${c[2].innerText}\n`;
+      body += `Job Type     : ${c[3].innerText}\n`;
+      body += `Date         : ${c[4].innerText}\n`;
+      body += `T/Band       : ${c[5].innerText}\n`;
+      body += `${divider}\n`;
+      body += `Additional Information:\n`;
+      body += `${c[6].innerText}\n`;
+      body += `${divider}\n\n`;
+
+    // ===== ENGINEER NOTES (from Notes tab) =====
+    const weekKeys = getWeekKeysForRange(fromVal, toVal);
+    const noteLines = [];
+    weekKeys.forEach(wk => {
+      const note = getEngineerNoteForWeek(engineerName, wk);
+      if (note) {
+        noteLines.push(`W/C starting ${wk}:`);
+        noteLines.push(note);
+        noteLines.push("");
+      }
+    });
+
+    if (noteLines.length) {
+      body += "\n" + "-".repeat(60) + "\n";
+      body += "NOTES:\n";
+      body += noteLines.join("\n");
+      body += "-".repeat(60) + "\n";
+    }
+    });
+
+    let mailto =
+      `mailto:${engineer.email}` +
+      `?subject=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`;
+
+    // CC FTL if present
+    if (engineer.ftlEmail) {
+      mailto += `&cc=${encodeURIComponent(engineer.ftlEmail)}`;
+    }
+
+    window.open(mailto);
+  });
+
+});
+
+
+
+
+
+// Your existing applyFilters() function stays as is
+function applyFilters() {
+  const engineerSelect = document.getElementById("engineerFilter");
+  const dateFromInput = document.getElementById("wiDateFrom");
+  const dateToInput = document.getElementById("wiDateTo");
+
+  
+const selectedEngineers = engineerSelect
+  ? Array.from(engineerSelect.selectedOptions)
+      .map(o => o.value)
+      .filter(v => v) // remove empty (All)
+  : [];
+
+  const dateFrom = dateFromInput && dateFromInput.value
+    ? new Date(dateFromInput.value).getTime()
+    : null;
+
+const dateTo = dateToInput && dateToInput.value
+  ? new Date(dateToInput.value + "T23:59:59").getTime()
+  : null;
+
+
+  const tbody = document.getElementById("workIssueBody");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+
+  // FILTER rows
+  rows.forEach(row => {
+    const engineer = row.dataset.engineer;
+    const date = Number(row.dataset.date);
+
+    let show = true;
+
+    // Engineer filter
+    if (selectedEngineers.length > 0 &&
+        !selectedEngineers.includes(engineer)) {
+      show = false;
+    }
+
+    // Date from
+    if (show && dateFrom && date < dateFrom) {
+      show = false;
+    }
+
+    // Date to
+    if (show && dateTo && date > dateTo) {
+      show = false;
+    }
+
+    row.style.display = show ? "" : "none";
+  });
+
+  // Sort visible rows by engineer (A–Z)
+  const visibleRows = rows
+    .filter(r => r.style.display !== "none")
+    .sort((a, b) =>
+      a.dataset.engineer.localeCompare(b.dataset.engineer)
+    );
+
+  visibleRows.forEach(row => tbody.appendChild(row));
+}
+
+
+
+
+
+// function to populate engineer list
+function populateEngineerDropdown() {
+  const select = document.getElementById("engineerFilter");
+  if (!select) return;
+
+  const names = Array.from(window.engineerSet || []).sort((a,b)=>a.localeCompare(b));
+
+  // Include an (All) option at top
+  select.innerHTML = `<option value="">(All)</option>` + names
+    .map(name => `<option value="${name}">${name}</option>`)
+    .join("");
+}
+
+
+
+// Then add these event listeners after the function
+const _wiSearchBox = document.getElementById("searchBox");
+if (_wiSearchBox) _wiSearchBox.addEventListener("input", applyFilters);
+const _wiEngineerFilter = document.getElementById("engineerFilter");
+if (_wiEngineerFilter) _wiEngineerFilter.addEventListener("change", applyFilters);
+
+</script>
+
+
+<!-- IMPORT (stub – required for panel system) -->
+<section id="import" class="panel hidden" aria-hidden="true"></section>
+
+
+<!-- IMPORT VL -->
+<section id="importvl" class="panel hidden" aria-hidden="true">
+    <h3>Import VL (Shared Master)</h3>
+<div style="
+  background:#f6fbff;
+  border:1px solid #e6ecf1;
+  border-radius:8px;
+  padding:10px 12px;
+  margin-bottom:12px;
+  font-size:13px;
+  color:#0f1720;
+">
+<strong>How Import VL works</strong>
+
+<p style="margin:6px 0 8px 0;">
+  Import VL is maintained in a <strong>shared master Excel file</strong>.
+  Changes made here are for <em>reference only</em> within this handover.
+</p>
+
+<p style="margin:0 0 10px 0;">
+  To update Import VL for <strong>everyone</strong>, use the master file below.
+</p>
+
+<!-- 👇 NEW guidance added here -->
+<p style="margin:0 0 10px 0;font-size:13px;">
+  <strong>How to update Import VL:</strong><br>
+  1. Click <em>Open Import VL Master</em><br>
+  2. Find the job using MPXN or Id<br>
+  3. Update Status, dates, or comments<br>
+  4. Changes save automatically for everyone
+</p>
+
+<a
+  href="https://eonos.sharepoint.com/:x:/r/sites/ComplexPlanningTeam/Shared%20Documents/General/Steves%20folder/Import_VL_Master.xlsx?d=w4c13f3acd91d4927a8db8ad5e10f57db&csf=1&web=1&e=oraz38"
+  target="_blank"
+  style="
+    display:inline-block;
+    background:#1e88e5;
+    color:#fff;
+    padding:8px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:600;
+  "
+>
+  Open Import VL Master
+</a>
+
+<p style="margin-top:8px;font-size:12px;color:#556;">
+  MPXN and Id are locked once created. Update existing rows rather than creating duplicates.
+</p>
+
+
+
+
+  <!-- Controls -->
+  <input
+  type="file"
+  id="excelFileVLInput"
+  accept=".xlsx,.xls,.csv"
+  style="margin-bottom:10px"
+>
+
+
+  <button id="importExcelVLBtn" class="fileBtnLike">Import Excel</button>
+  <button id="saveVLDataBtn" class="fileBtnLike" style="margin-left:10px;">Save Data</button>
+  <button id="exportVLDataBtn" class="fileBtnLike" style="margin-left:10px;">Export to Excel</button>
+  <button id="vlPrevPageBtn" class="fileBtnLike" style="margin-left:10px;">Prev</button>
+  <button id="vlNextPageBtn" class="fileBtnLike" style="margin-left:6px;">Next</button>
+  <span id="vlPageLabel" style="margin-left:10px;font-weight:600;"></span>
+
+  <input
+    type="text"
+    id="vlSearchInput"
+    placeholder="Search..."
+    style="margin-left:10px; width:200px; padding:4px; border:1px solid #ccc; border-radius:4px;"
+  >
+
+  
+  <div id="vlFilters" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+    <label style="font-size:12px;color:#556;">
+      Work Stream<br>
+      <select id="vlFilterWorkStream" class="smallInput" style="min-width:180px">
+        <option value="">(All)</option>
+      </select>
+    </label>
+
+    <label style="font-size:12px;color:#556;">
+      Allocated To<br>
+      <select id="vlFilterAllocatedTo" class="smallInput" style="min-width:180px">
+        <option value="">(All)</option>
+      </select>
+    </label>
+
+    <label style="font-size:12px;color:#556;">
+      Operative Group<br>
+      <select id="vlFilterOperativeGroup" class="smallInput" style="min-width:180px">
+        <option value="">(All)</option>
+      </select>
+    </label>
+
+    <label style="font-size:12px;color:#556;">
+      HV<br>
+      <select id="vlFilterHV" class="smallInput" style="min-width:90px">
+        <option value="">(All)</option>
+      </select>
+    </label>
+
+    <label style="font-size:12px;color:#556;">
+      VT Ratio<br>
+      <select id="vlFilterVTRatio" class="smallInput" style="min-width:110px">
+        <option value="">(All)</option>
+      </select>
+    </label>
+
+    <label style="font-size:12px;color:#556;">
+      Appt date from<br>
+      <input id="vlFilterApptFrom" type="date" class="smallInput">
+    </label>
+
+    <label style="font-size:12px;color:#556;">
+      Appt date to<br>
+      <input id="vlFilterApptTo" type="date" class="smallInput">
+    </label>
+
+    <button id="vlClearFiltersBtn" class="fileBtnLike" style="height:32px;">Clear filters</button>
+  </div>
+<!-- VL Table -->
+  <div id="vlTableWrapper">
+
+<table style="width:100%; border-collapse: collapse; margin-top:10px;">
+    <thead>
+      <tr>
+        <th>MPAN</th>
+        <th>Work Stream</th>
+        <th>Job No</th>
+        <th>Allocated To</th>
+        <th>Postcode</th>
+        <th>Operative Group</th>
+        <th>Planning Note(s)</th>
+        <th>HV</th>
+        <th>MPXN</th>
+        <th>Id</th>
+        <th>JobCat</th>
+        <th>JobDesc</th>
+        <th>ApptDate</th>
+        <th>TimeSlot</th>
+        <th>Comments</th>
+        <th>CustomerName</th>
+        <th>CustomerAddress</th>
+        <th>Postcode</th>
+        <th>SiteContactTelNo</th>
+        <th>OperativeGroup</th>
+        <th>OperativeName</th>
+        <th>OperativeName2</th>
+        <th>FTM</th>
+        <th>BookingAgent</th>
+        <th>BookingDate</th>
+        <th>Status</th>
+        <th>VT Ratio</th>
+        <th>CT Ratio</th>
+        <th>Serial Number</th>
+        <th>Equipment Type</th>
+        <th>Name</th>
+        <th>Meter COP Ref</th>
+        <th>SSC</th>
+        <th>RequestedSSC</th>
+      </tr>
+    </thead>
+
+    <tbody id="importVLTableBody"></tbody>
+  </table>
+
+</div>
+</section>
+
+
+<!-- NO AVAILABILITY -->
+<section id="availability" class="panel hidden" aria-hidden="true">
+  <h3>No Availability</h3>
+
+  <input type="file" id="excelFileNA" accept=".xlsx,.xls" style="margin-bottom:10px">
+  <button id="availabilityExcelBtn" class="fileBtnLike">Import Excel</button>
+<button id="selectFolderBtn" class="fileBtnLike">Select Folder</button>
+
+
+<select id="fileDropdown" class="fileBtnLike" style="margin-left:10px; width:200px;">
+  <option value="">No files imported</option>
+</select>
+
+<input type="text" id="searchInput" placeholder="Search..." style="margin-left:10px; width:200px; padding:4px; border:1px solid #ccc; border-radius:4px;">
+
+<!-- Hidden input for folder selection -->
+<input type="file" id="folderInput" webkitdirectory directory style="display:none" />
+
+
+  <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+<thead>
+  <tr>
+    <th>Id</th>
+    <th>MPXN</th>
+    <th>Postcode</th>
+    <th>EngineerGroup</th>
+    <th>CapacityGroup</th>
+    <th>JobType</th>
+    <th>ApptDate</th>
+    <th>TimeSlot</th>
+    <th>CreatedDate</th>
+    <th>BookedByUser</th>
+    <th>CustomerAddress</th>
+    <th>CustomerName</th>
+    <th>AllocatedStartTime</th>
+    <th>Comments</th>
+    <th>Status</th>
+    <th>RequestedEnergisationStatus</th>
+    <th>RequestedSSC</th>
+    <th>SpecificCapacityOnApptDate</th>
+    <th>DateCapacityLastUpdated</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
+    <tbody id="noAvailabilityTableBody"></tbody>
+  </table>
+</section>
+
+
+    <!-- CAPACITY -->
+    <section id="capacity" class="panel hidden" aria-hidden="true">
+      <h3>Capacity</h3>
+      <div style="height:260px;border:1px dashed var(--grid);border-radius:6px;padding:8px">Capacity grid placeholder</div>
+    </section>
+
+    <!-- NOTES -->
+    <section id="notes" class="panel hidden" aria-hidden="true">
+      <h3>Notes (per Engineer)</h3>
+
+      <div class="row" style="gap:10px;align-items:flex-end;margin-bottom:10px">
+        <label style="min-width:220px">
+          From:
+          <input id="notesFrom" type="date" class="smallInput" />
+        </label>
+
+        <label style="min-width:220px">
+          To:
+          <input id="notesTo" type="date" class="smallInput" />
+        </label>
+
+        
+
+        <button id="notesHelpBtn" class="fileBtnLike" type="button" style="margin-left:8px;">Instructions</button>
+
+        <div id="notesHelpModal" style="
+          display:none;
+          position:fixed;
+          top:0; left:0;
+          width:100%; height:100%;
+          background:rgba(0,0,0,0.5);
+          z-index:9999;">
+          <div style="
+            background:#fff;
+            max-width:620px;
+            margin:10% auto;
+            padding:18px 20px;
+            border-radius:10px;">
+            <h3 style="margin-top:0;">How to use Notes</h3>
+            <ol style="padding-left:18px; margin:0 0 14px 0;">
+              <li>Select a <b>From</b> and <b>To</b> date.</li>
+              <li>Type notes against each engineer.</li>
+              <li>Notes are saved <b>per engineer per date range</b>.</li>
+              <li>On <b>Work Issue</b>, when you click <b>Email Selected</b>, any notes whose date range overlaps the Work Issue <b>From/To</b> range will be included.</li>
+            </ol>
+            <button id="closeNotesHelp" class="fileBtnLike" type="button">Close</button>
+          </div>
+        </div>
+
+
+        <div style="color:var(--muted);font-size:12px;line-height:1.2">
+          Notes are saved per engineer for the selected date range.
+        </div>
+      </div>
+
+      <div id="notesContainer"></div>
+    </section>
+
+<!-- REPLANS -->
+    <section id="replans" class="panel hidden" aria-hidden="true">
+      <h3>Replans</h3>
+      <div style="height:260px;border:1px dashed var(--grid);border-radius:6px;padding:8px">Capacity grid placeholder</div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin" class="panel hidden" aria-hidden="true">
+      <h3>Admin - Engineers & Planned Area</h3>
+  <!-- FIXED BAR -->
+  <div id="adminFixedBar">
+    <div class="admin-controls">
+      <input id="a_name" placeholder="Name" class="smallInput">
+      <input id="a_post" placeholder="Home P/Code" class="smallInput">
+      <input id="a_skill" placeholder="Skill" class="smallInput">
+
+      <input id="a_ftl" placeholder="FTL" class="smallInput">
+      <input id="a_ftl_email" placeholder="FTL Email" class="smallInput">
+      <input id="a_email" placeholder="Engineer Email" class="smallInput">
+
+      <input id="a_stream" placeholder="Planned Area" class="smallInput">
+      <input id="a_phone" placeholder="Phone" class="smallInput">
+
+      <button id="addEng" class="fileBtnLike">Add Engineer</button>
+    </div>
+  </div>
+
+
+<h4>Engineers</h4>
+<table id="adminEngineers" style="width:100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Postcode</th>
+      <th>Skill</th>
+      <th>FTL</th>
+      <th>Phone</th>
+      <th>Area</th>
+      <th>Engineer Email</th>
+      <th>FTL Email</th>
+      <th>Edit</th>
+      <th>Remove</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+    <h4 style="margin-top:10px">Planned Area</h4>
+    <div style="display:flex;gap:6px">
+      <input id="newStream" placeholder="Add Planned Area" class="smallInput">
+      <button id="addStream" class="fileBtnLike">Add</button>
+    </div>
+    <ul id="streamsList"></ul>
+
+  </div>
+</section>
+
+
+
+<div id="contextMenu" class="contextMenu hidden">
+  <div style="margin-bottom:6px"><button id="cmAddEdit" class="fileBtnLike">Add / Edit comment</button></div>
+  <div><button id="cmView" class="fileBtnLike">View comment</button></div>
+  <div style="margin-top:6px"><button id="cmClear" class="fileBtnLike">Clear comment</button></div>
+</div>
+
+<div class="footer">Saved locally in your browser. To reset data, open DevTools → Application → Local Storage and clear key <code>weekly_handover_weeks_v2</code>.</div>
+
+<!-- XLSX library for Excel importing -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+
+
+
+
+
+/* ---------- STORAGE & DEFAULTS ---------- */
+const STORAGE_KEY = 'weekly_handover_weeks_v2';
+const DEFAULT = {
+  masterEngineers: [
+    /* (same master engineer list as uploaded) */
+    {name:"Abdeloualid Belahcene", post:"NW2 1RH", skill:"3", ftl:"Danny Chaplin", stream:"Lancashire"},
+    {name:"Adam Baker", post:"NR9 5AZ", skill:"3ph & CT Comms", ftl:"Gary Must"},
+    {name:"Adrian Briggs", post:"BL3 4RJ", skill:"3ph & CT Comms", ftl:"Gary Must"},
+    {name:"Adrian Cobb", post:"DN17 2DF", skill:"5", ftl:"Gary Must"},
+    {name:"Alan Crompton", post:"BL3 4RJ", skill:"3ph & CT Comms", ftl:"Gary Must"},
+    {name:"Alan Dearlove", post:"HP22 5RU", skill:"4", ftl:"Danny Chaplin"},
+    {name:"Alex Roodnat", post:"M30 9GG", skill:"3ph & CT Comms", ftl:"Henderson Leslie"},
+    {name:"Andrew Bridger", post:"BD22 7EA", skill:"3", ftl:"Sam Coverdale"},
+    {name:"Andrew Poole", post:"CW10 0NJ", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Andrew Twibill", post:"LS27 7AG", skill:"5", ftl:"Sam Coverdale"},
+    {name:"Ashley Dixon", post:"PR5 4RL", skill:"3ph & CT Comms", ftl:"Gary Must"},
+    {name:"Attila Pall", post:"TN30 6DY", skill:"5", ftl:"Danny Chaplin"},
+    {name:"Ben Hatcher", post:"EX6 8EH", skill:"3", ftl:"Henderson Leslie"},
+    {name:"Callum O'Neill", post:"WN4 0QG", skill:"4", ftl:"Dave Nuttall"},
+    {name:"Cameron Stewart", post:"FK6 5DY", skill:"4", ftl:"Sam Coverdale"},
+    {name:"Chris Bacon", post:"SR2", skill:"3", ftl:"Sam Coverdale"},
+    {name:"Chris Berry", post:"M26 4DU", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Connor Upstone", post:"S60 5AP", skill:"4", ftl:"Sam Coverdale"},
+    {name:"Dan Haigh", post:"S8 8QU", skill:"4", ftl:"Sam Coverdale"},
+    {name:"Dan Ward", post:"LE8 0HW", skill:"4", ftl:"Gary Must"},
+    {name:"Daniel Gunning", post:"S8 8EY", skill:"5", ftl:"Sam Coverdale"},
+    {name:"Dave Barker", post:"YO24 3LE", skill:"5", ftl:"Sam Coverdale"},
+    {name:"Dave Billington", post:"LE7 9TR", skill:"3", ftl:"Henderson Leslie"},
+    {name:"David Gordon", post:"N8 7AZ", skill:"1", ftl:"Danny Chaplin"},
+    {name:"Derek Wood", post:"DN5 9QL", skill:"5", ftl:"Gary Must"},
+    {name:"Dogus Akin", post:"EN8 7NN", skill:"1", ftl:"Danny Chaplin"},
+    {name:"Dylan Jones", post:"M14 6BW", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Fran Walsh", post:"CV34 6LA", skill:"4", ftl:"Henderson Leslie"},
+    {name:"Gary Fisher", post:"B79 0NS", skill:"4", ftl:"Henderson Leslie"},
+    {name:"Graeme Cowen", post:"CA14 2QW", skill:"3", ftl:"Sam Coverdale"},
+    {name:"Hardeep Sahota", post:"CV4 7EE", skill:"3ph & CT Comms", ftl:"Henderson Leslie"},
+    {name:"Harry Hughes", post:"NR13 4QY", skill:"3ph & CT Comms", ftl:"Gary Must"},
+    {name:"Harry Wyatt", post:"WR2 5TW", skill:"3ph & CT Comms", ftl:"Gary Must"},
+    {name:"Ian Turley", post:"ST3 1SL", skill:"5", ftl:"Dave Nuttall"},
+    {name:"James Vaughan", post:"CF61 2SP", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Jamie Cameron", post:"NR13 3EY", skill:"5", ftl:"Gary Must"},
+    {name:"Jason May", post:"RG23 8EH", skill:"3", ftl:"Danny Chaplin"},
+    {name:"Jason Metcalf", post:"MK17", skill:"3ph & CT Comms", ftl:"Gary Must"},
+    {name:"John Leahy", post:"L4 1YF", skill:"3ph & CT Comms", ftl:"Dave Nuttall"},
+    {name:"John Pengilly", post:"ST17 9DB", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Jonathan Seavers", post:"PO36 8AX", skill:"5", ftl:"Danny Chaplin"},
+    {name:"Joseph Ogundele", post:"CM7 3PR", skill:"1", ftl:"Danny Chaplin"},
+    {name:"Jurell Patterson", post:"N10 1HT", skill:"1", ftl:"Danny Chaplin"},
+    {name:"Karl Glossop", post:"S21 1EN", skill:"5", ftl:"Sam Coverdale"},
+    {name:"Katerina Stoyanova", post:"HP2 6EF", skill:"1", ftl:"Danny Chaplin"},
+    {name:"Kyle McNicol", post:"LS15 0EF", skill:"5", ftl:"Sam Coverdale"},
+    {name:"Lee Farmer", post:"ML1 4FN", skill:"3", ftl:"Sam Coverdale"},
+    {name:"Lee Whitehouse", post:"DY10 4RY", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Lewis Knight", post:"HR9 7GR", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Louis Kiff", post:"GL10 2EX", skill:"3ph & CT Comms", ftl:"Henderson Leslie"},
+    {name:"Marek Kazmierczak", post:"M25 0BT", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Marinco Nakev", post:"WD24 4EU", skill:"3", ftl:"Danny Chaplin"},
+    {name:"Marius Bogdan Ghinea", post:"CB4 2ZE", skill:"4", ftl:"Gary Must"},
+    {name:"Mark Davis", post:"OX25 1QT", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Mark Hazelip", post:"LS16 7RJ", skill:"5", ftl:"Sam Coverdale"},
+    {name:"Mark Riley", post:"LE6 0HL", skill:"5", ftl:"Gary Must"},
+    {name:"Mark Wager", post:"WS7 2AX", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Mark Williamson", post:"SK6 6DT", skill:"4", ftl:"Dave Nuttall"},
+    {name:"Martin Eglington", post:"TN40", skill:"3", ftl:"Sam Coverdale"},
+    {name:"Michael Beagles", post:"BS30 8GL", skill:"3ph & CT Comms", ftl:"Henderson Leslie"},
+    {name:"Michelle Dixon-Foster", post:"M29 7DA", skill:"3ph & CT Comms", ftl:"Henderson Leslie"},
+    {name:"Mike Hodges", post:"IP6 8FB", skill:"4", ftl:"Gary Must"},
+    {name:"Mitchel Poulton", post:"SS7 4LA", skill:"1", ftl:"Danny Chaplin"},
+    {name:"Mohammad Khodabocus", post:"EN3 4HY", skill:"4", ftl:"Danny Chaplin"},
+    {name:"Naveed Hussain", post:"LU4 9QZ", skill:"3ph & CT Comms", ftl:"Danny Chaplin"},
+    {name:"Neil Simpson", post:"WN2 3SP", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Nigel Hodgkins", post:"WV9 5DZ", skill:"5", ftl:"Sam Coverdale"},
+    {name:"Paul Ackroyd", post:"HU16 5AX", skill:"5", ftl:"Gary Must"},
+    {name:"Paul Andrews", post:"S35 1WJ", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Paul Buet", post:"B37 5EL", skill:"4", ftl:"Dave Nuttall"},
+    {name:"Paul Golding", post:"B24 9HH", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Peter Long", post:"WR5 3HE", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Peter Oakes", post:"BN14 7BN", skill:"4", ftl:"Danny Chaplin"},
+    {name:"Richard Derry", post:"LN1 2HA", skill:"4", ftl:"Gary Must"},
+    {name:"Richard Gleaves", post:"ST7 7JH", skill:"3ph & CT Comms", ftl:"Dave Nuttall"},
+    {name:"Robert Hughes", post:"LL15 2NA", skill:"4", ftl:"Dave Nuttall"},
+    {name:"Ryan Simpson", post:"WN2 3FT", skill:"5", ftl:"Dave Nuttall"},
+    {name:"Shaun Jones", post:"SM43", skill:"3", ftl:"Sam Coverdale"},
+    {name:"Simon Stapleton", post:"NG5 7LB", skill:"5", ftl:"Gary Must"}, 
+    {name:"Simon Tesseyman", post:"BH23 7HE", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Stephen Badham", post:"GL20 5PP", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Stephen Hall", post:"BD13 5HF", skill:"4", ftl:"Sam Coverdale"},
+    {name:"Stewart McIntosh", post:"PR6 9ST", skill:"3", ftl:"Gary Must"},
+    {name:"Stuart McCullagh", post:"B37 5LF", skill:"3", ftl:"Henderson Leslie"},
+    {name:"Syed Shah", post:"E17 4AZ", skill:"3", ftl:"Danny Chaplin"},
+    {name:"Terry Hodgkinson", post:"CM17 9GU", skill:"4", ftl:"Danny Chaplin"},
+    {name:"Vachand Nankoosing", post:"N8 7EA", skill:"3", ftl:"Danny Chaplin"},
+    {name:"Warren Gray", post:"WV10 6RG", skill:"5", ftl:"Henderson Leslie"},
+    {name:"Wayne Tully", post:"PH10 7BB", skill:"3", ftl:"Sam Coverdale"},
+    {name:"Will Crew", post:"DY10 7AE", skill:"5", ftl:"Henderson Leslie"}
+  ],
+  masterStreams: ["East Coast","Midlands","Woking","Southwark","Devon"],
+  weeks: {},
+  jobsAgreedCancelled: []
+};
+let store = {};
+function loadStore(){ try{ const s=localStorage.getItem(STORAGE_KEY); store = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT)); }catch(e){ console.error(e); store = JSON.parse(JSON.stringify(DEFAULT)); } }
+function saveStore(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
+
+/* ---------- DATES & WEEKS ---------- */
+function startOfMonday(d){ const dt=new Date(d); const day=dt.getDay(); const diff=(day===1)?0:(day===0?-6:1-day); dt.setDate(dt.getDate()+diff); dt.setHours(0,0,0,0); return dt; }
+function isoDate(d){ return d.toISOString().slice(0,10); }
+function formatDDMMYYYY(d){ const dd=('0'+d.getDate()).slice(-2); const mm=('0'+(d.getMonth()+1)).slice(-2); return dd+'/'+mm+'/'+d.getFullYear(); }
+
+let currentMonday = startOfMonday(new Date());
+let currentWeekKey = isoDate(currentMonday);
+function ensureWeekKey(key){
+  if(!store.weeks[key]){
+    store.weeks[key] = { engineers: JSON.parse(JSON.stringify(store.masterEngineers)), streams: JSON.parse(JSON.stringify(store.masterStreams)), jobs: [], comments: {}, colors: {}, textColors: {}, engineerCells: {}, notes: {} };
+    saveStore();
+  }
+}
+
+/* ---------- UI helpers ---------- */
+function escapeHtml(s){ if(s === null || s === undefined) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function formatDateFriendly(d){ if(!d) return ''; const dt=new Date(d); if(isNaN(dt)) return d; return formatDDMMYYYY(dt); }
+
+/* ---------- RENDER DATES ---------- */
+function renderDatesRow(){
+  const container = document.getElementById('datesRow'); container.innerHTML = '';
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  for(let i=0;i<5;i++){
+    const dd = new Date(currentMonday); dd.setDate(currentMonday.getDate()+i);
+    const div = document.createElement('div');
+    div.className = 'date' + (i===0 ? ' mon' : '');
+    div.innerHTML = `<div>${days[i]}</div><div style="margin-top:6px">${formatDDMMYYYY(dd)}</div>`;
+    container.appendChild(div);
+  }
+  document.getElementById('wcLabel').textContent = 'W/C ' + formatDDMMYYYY(currentMonday);
+  document.getElementById('mondayPicker').value = isoDate(currentMonday);
+}
+
+/* ---------- RENDER MAIN TABLE ---------- */
+function renderEngineersTable() {
+  ensureWeekKey(currentWeekKey);
+  const week = store.weeks[currentWeekKey];
+  const tbody = document.getElementById('tbodyEngineers');
+  tbody.innerHTML = '';
+const filterEngVal = document.getElementById('filterEngineer').value;
+
+if (filterEngVal === 'az') {
+    week.engineers.sort((a, b) => 
+        (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase())
+    );
+}
+
+// ⭐ FILTER / SORT: Planned Area A–Z
+const plannedAreaFilter = document.getElementById("filterPlannedArea").value;
+
+if (plannedAreaFilter === "az") {
+    // Sort the WEEK engineers list
+    week.engineers.sort((a, b) => {
+        const areaA = (a.stream || "").toLowerCase();
+        const areaB = (b.stream || "").toLowerCase();
+        return areaA.localeCompare(areaB);
+    });
+}
+
+  // apply filters
+  let filterEngineerVal = document.getElementById('filterEngineer').value;
+
+// If user selects A–Z, DO NOT filter → only sort
+const fEng = filterEngineerVal === 'az' ? '' : filterEngineerVal;
+
+// If A–Z, sort engineers by name
+if (filterEngineerVal === 'az') {
+    week.engineers.sort((a, b) =>
+        (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase())
+    );
+}
+
+  const fStream = (document.getElementById('filterStream') && document.getElementById('filterStream').value) || '';
+  const fStatus = (document.getElementById('filterStatus') && document.getElementById('filterStatus').value) || '';
+  let fPlannedArea = (document.getElementById('filterPlannedArea') && document.getElementById('filterPlannedArea').value) || '';
+
+  // If A–Z is selected, use it only for sorting, not for filtering
+  if (fPlannedArea === 'az') {
+    fPlannedArea = '';  // disable planned-area filter, keep sort only
+  }
+
+  week.engineers.forEach((e, idx) => {
+    // Filter by engineer and stream
+    if (fEng && e.name !== fEng) return;
+    if (fStream && (String(e.stream || e.ftl || '') !== fStream)) return;
+    if (fPlannedArea && fPlannedArea !== '' && (e.stream !== fPlannedArea && e.ftl !== fPlannedArea)) return;
+
+    const tr = document.createElement('tr');
+
+    const nameCell = `<td class="tooltip"><a href="#" class="eng-link" data-idx="${idx}">${escapeHtml(e.name)}</a><div class="tip">${escapeHtml(e.name)}${e.phone ? (' - ' + escapeHtml(e.phone)) : ''}</div></td>`;
+    const post = `<td><input class="inputcell" data-idx="${idx}" data-field="post" value="${escapeHtml(String(e.post || ''))}"></td>`;
+    const skill = `<td><input class="inputcell" data-idx="${idx}" data-field="skill" value="${escapeHtml(String(e.skill || ''))}"></td>`;
+    const ftl = `<td><a href="#" class="ftl-link" data-idx="${idx}">${escapeHtml(e.ftl || '')}</a></td>`;
+    ;
+
+
+    const daysHtml = [0,1,2,3,4].map(d=>{
+      const key = `${idx}_${d}`;
+      let raw = (week.engineerCells && week.engineerCells[key] !== undefined) ? week.engineerCells[key] : '';
+      // defensive: if raw is an object, stringify safely
+      let val = '';
+      if (raw === null || raw === undefined) val = '';
+      else if (typeof raw === 'object') {
+        try { val = JSON.stringify(raw); } catch(err){ val = String(raw); }
+      } else val = String(raw);
+
+      const hasComment = week.comments && week.comments[key];
+      const bgColor = week.colors && week.colors[key] ? week.colors[key] : '';
+      const textColor = week.textColors && week.textColors[key] ? week.textColors[key] : '';
+      const styleParts = [];
+      if(bgColor) styleParts.push(`background:${bgColor}`);
+      if(textColor) styleParts.push(`color:${textColor}`);
+      const style = styleParts.length ? `style="${styleParts.join(';')}"` : '';
+      const icon = hasComment ? `<span class="cmIcon" data-idx="${idx}" data-day="${d}" title="Click to view comment">💬</span>` : '';
+      // contenteditable inner div; double-click to edit (we focus it), and Shift+click on cell applies colour
+      return `<td ${style} data-idx="${idx}" data-day="${d}" class="daycell" tabindex="0"><div class="cellText" contenteditable="true" data-idx="${idx}" data-day="${d}">${escapeHtml(val||'')}</div>${icon}</td>`;
+    }).join('');
+
+    const stream = `<td><input class="inputcell" data-idx="${idx}" data-field="stream" value="${escapeHtml(String(e.stream||''))}"></td>`;
+    const hotel = `<td><input class="inputcell" data-idx="${idx}" data-field="hotel" value="${escapeHtml(String(e.hotel||''))}"></td>`;
+    const info = `<td><input class="inputcell" data-idx="${idx}" data-field="info" value="${escapeHtml(String(e.info||''))}"></td>`;
+    tr.innerHTML = nameCell + post + skill + ftl + daysHtml + stream + hotel + info;
+    tbody.appendChild(tr);
+  });
+
+  attachInputHandlers();
+  wireEngLinks();
+  renderJobsSummary();
+}
+
+/* ---------- ENG LINKS ---------- */
+function wireEngLinks() {
+  const ccEmail = 'ESUK-Complex@eonenergy.com'; // CC email
+
+  // Existing ENG links
+  document.querySelectorAll('.eng-link').forEach(a => {
+    a.onclick = function(ev) {
+      ev.preventDefault();
+      const idx = Number(this.dataset.idx);
+      const eng = store.weeks[currentWeekKey].engineers[idx];
+      const email = eng.email || (eng.name.split(' ').join('.').toLowerCase() + '@example.com');
+      const sub = encodeURIComponent('Weekly Handover for W/C ' + document.getElementById('mondayPicker').value);
+
+      // Construct mailto with CC
+      window.location.href = `mailto:${encodeURIComponent(email)}?subject=${sub}&cc=${encodeURIComponent(ccEmail)}`;
+    };
+  });
+
+  // New FTL links
+  document.querySelectorAll('.ftl-link').forEach(a => {
+    a.onclick = function(ev) {
+      ev.preventDefault();
+      const idx = Number(this.dataset.idx);
+      const eng = store.weeks[currentWeekKey].engineers[idx];
+      const email = eng.ftlEmail || (eng.ftl ? eng.ftl.split(' ').join('.').toLowerCase() + '@example.com' : '');
+      if (!email) {
+        alert('No FTL email available');
+        return;
+      }
+      const sub = encodeURIComponent('Weekly Handover - FTL');
+
+      // Construct mailto with CC
+      window.location.href = `mailto:${encodeURIComponent(email)}?subject=${sub}&cc=${encodeURIComponent(ccEmail)}`;
+    };
+  });
+}
+
+
+/* ---------- INPUTS & DAY CELLS ---------- */
+function attachInputHandlers(){
+  // simple inputs (engineer fields etc.)
+  document.querySelectorAll('.inputcell').forEach(inp=>{
+    // use input event to save immediately
+    inp.addEventListener('change', function(){
+      const idx=Number(this.dataset.idx); const f=this.dataset.field;
+      if(!isNaN(idx) && f){
+        store.weeks[currentWeekKey].engineers[idx][f] = this.value;
+        saveStore();
+      }
+    });
+  });
+
+  // contenteditable day cell handling: input & blur (auto-save)
+  document.querySelectorAll('.cellText').forEach(div=>{
+    // input saves live
+    div.addEventListener('input', (ev)=>{
+      const idx = Number(div.dataset.idx), day = div.dataset.day;
+      const week = store.weeks[currentWeekKey];
+      week.engineerCells = week.engineerCells || {};
+      week.engineerCells[`${idx}_${day}`] = div.innerText;
+      saveStore();
+    });
+    // don't force re-render on focus/typing; re-render on blur to apply style changes safely
+    div.addEventListener('blur', ()=>{
+      // saved on input; re-render to ensure style application and icons are fresh
+      renderEngineersTable();
+    });
+    // prevent Enter creating newline; blur on Enter
+    div.addEventListener('keydown', (ev)=>{
+      if(ev.key === 'Enter'){ ev.preventDefault(); div.blur(); }
+    });
+    // double-click handler: focus editable area (user requested double-click to edit)
+    div.parentElement.addEventListener('dblclick', (ev)=>{
+      ev.preventDefault();
+      div.focus();
+      // place caret at end
+      const range = document.createRange();
+      range.selectNodeContents(div);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+  });
+
+  // daycell handlers
+  document.querySelectorAll('.daycell').forEach(cell=>{
+    cell.oncontextmenu = function(ev){ ev.preventDefault(); showContextMenu(ev.pageX, ev.pageY, this); };
+
+    // SHIFT+click to apply colour — avoids stealing focus on ordinary clicks
+    cell.addEventListener('click', function(e){
+      try {
+        if(!e.shiftKey) return; // require Shift to apply colour to avoid interfering with editing
+        const mode = document.querySelector('input[name="colorMode"]:checked').value;
+        const pick = document.getElementById('colorPicker').value;
+        const idx = this.dataset.idx, day = this.dataset.day;
+        if(idx === undefined) return;
+        const week = store.weeks[currentWeekKey];
+
+        if(mode === 'bg'){
+          if(pick){
+            week.colors = week.colors || {};
+            week.colors[`${idx}_${day}`] = pick;
+          } else {
+            if(week.colors) delete week.colors[`${idx}_${day}`];
+          }
+        } else {
+          week.textColors = week.textColors || {};
+          if(pick){
+            week.textColors[`${idx}_${day}`] = pick;
+          } else {
+            if(week.textColors) delete week.textColors[`${idx}_${day}`];
+          }
+        }
+        saveStore();
+        renderEngineersTable();
+      } catch(err){
+        console.error(err);
+      }
+    });
+
+    // double-click on the cell focuses editable div (handled above) — keep for safety:
+    cell.addEventListener('dblclick', function(e){
+      const inner = this.querySelector('.cellText');
+      if(inner){ inner.focus(); }
+    });
+  });
+
+  // click on comment icon to view/edit
+  document.querySelectorAll('.cmIcon').forEach(ic=>ic.onclick = function(ev){
+    ev.stopPropagation();
+    const idx = this.dataset.idx, day=this.dataset.day;
+    const key = `${idx}_${day}`; const week = store.weeks[currentWeekKey];
+    const existing = week.comments && week.comments[key] ? week.comments[key] : '';
+    const txt = prompt('Comment for this cell', existing||'');
+    if(txt===null) return;
+    if(!txt.trim()){ if(week.comments) delete week.comments[key]; } else { week.comments = week.comments || {}; week.comments[key]=txt.trim(); }
+    saveStore(); renderEngineersTable();
+  });
+}
+
+/* ---------- SAVE DAY CELL (fallback) ---------- */
+function saveDayCell(cell){
+  const idx = Number(cell.dataset.idx), day = cell.dataset.day;
+  const txt = cell.querySelector('.cellText').innerText.trim();
+  const week = store.weeks[currentWeekKey];
+  week.engineerCells = week.engineerCells || {};
+  week.engineerCells[`${idx}_${day}`] = txt;
+  saveStore();
+  renderEngineersTable();
+}
+
+/* ---------- CONTEXT MENU ---------- */
+let contextTarget = null; const contextMenu = document.getElementById('contextMenu');
+function showContextMenu(x,y,targetCell){ contextTarget = targetCell; contextMenu.style.left = x+'px'; contextMenu.style.top = y+'px'; contextMenu.classList.remove('hidden'); }
+document.getElementById('cmAddEdit').onclick = ()=>{
+  if(!contextTarget) return;
+  const idx=contextTarget.dataset.idx, day=contextTarget.dataset.day, key=`${idx}_${day}`; ensureWeekKey(currentWeekKey);
+  const week = store.weeks[currentWeekKey]; const existing = week.comments && week.comments[key] ? week.comments[key] : '';
+  const txt = prompt('Edit comment for this cell:', existing||'');
+  if(txt===null){ hideContext(); return; }
+  if(!txt.trim()){ if(week.comments) delete week.comments[key]; } else { week.comments=week.comments||{}; week.comments[key]=txt.trim(); }
+  saveStore(); hideContext(); renderEngineersTable();
+};
+document.getElementById('cmView').onclick = ()=>{
+  if(!contextTarget) return;
+  const idx=contextTarget.dataset.idx, day=contextTarget.dataset.day, key=`${idx}_${day}`;
+  const week = store.weeks[currentWeekKey];
+  const existing = week.comments && week.comments[key] ? week.comments[key] : '';
+  alert(existing ? existing : 'No comment for this cell');
+  hideContext();
+};
+document.getElementById('cmClear').onclick = ()=>{
+  if(!contextTarget) return;
+  const idx=contextTarget.dataset.idx, day=contextTarget.dataset.day, key=`${idx}_${day}`; const week = store.weeks[currentWeekKey];
+  if(week.comments) delete week.comments[key];
+  saveStore(); hideContext(); renderEngineersTable();
+};
+document.addEventListener('click', (e)=>{ if(!contextMenu.contains(e.target)) hideContext(); });
+function hideContext(){ contextMenu.classList.add('hidden'); contextTarget=null; }
+
+/* ---------- COLORS SETUP ---------- */
+const favColorsDefault = ['#d71920','#0b8a4f','#1e88e5','#8e24aa','#000000','#ff9800','#ff69b4','#ffffff'];
+function setupColors(){
+  const fav = document.getElementById('favSwatches'); fav.innerHTML='';
+  favColorsDefault.forEach(c=>{
+    const d=document.createElement('div'); d.className='colorSw'; d.style.background=c; d.dataset.c=c;
+    d.onclick = ()=>{ document.getElementById('colorPicker').value = c; };
+    fav.appendChild(d);
+  });
+  document.querySelectorAll('.smallSw').forEach(s=>{
+    s.addEventListener('click', ()=>{ document.getElementById('colorPicker').value = s.dataset.c; });
+  });
+  document.getElementById('clearColor').addEventListener('click', ()=>{
+    document.getElementById('colorPicker').value = '#ffffff';
+  });
+}
+
+/* ---------- IMPORT EXCEL (.xlsx) BUTTON ---------- */
+document
+  .getElementById("importExcelVLBtn")
+  .addEventListener("click", () => {
+
+    const fileInput = document.getElementById("excelFileVLInput");
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("Please choose an Excel file first.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+      // Convert to objects using headers
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+    VL_STATE.allRows = rows;
+VL_STATE.filteredRows = rows;
+VLData = VL_STATE.allRows; // keep old Save/Export paths working too
+
+populateVLFilterOptions();
+VL_STATE.page = 0;
+
+renderVLPage();
+updateVLPageLabel();
+
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+
+// Global variable to store VL data
+let VLData = [];
+
+function populateVLTable(rows) {
+  const tbody = document.getElementById("importVLTableBody");
+  tbody.innerHTML = "";
+  
+  // Store data globally for editing
+  VLData = rows;
+
+  let index = 0;
+  const chunkSize = 300;
+
+  function renderChunk() {
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < chunkSize && index < rows.length; i++, index++) {
+      const row = rows[index];
+      const tr = document.createElement("tr");
+      tr.dataset.rowIndex = index;
+
+tr.innerHTML = `
+  <td contenteditable="true" data-field="MPXN">${row.MPXN || ""}</td>                 <!-- MPAN -->
+  <td contenteditable="true" data-field="OperativeGroup">${row.OperativeGroup || ""}</td>      <!-- Work Stream -->
+  <td contenteditable="true" data-field="Id">${row.Id || ""}</td>                  <!-- Job No -->
+  <td contenteditable="true" data-field="OperativeName">${row.OperativeName || ""}</td>       <!-- Allocated To -->
+  <td contenteditable="true" data-field="Postcode">${row.Postcode || ""}</td>
+  <td contenteditable="true" data-field="OperativeGroup2">${row.OperativeGroup || ""}</td>
+  <td contenteditable="true" data-field="PlanningNotes">${row["Planning Note(s)"] || ""}</td>
+  <td contenteditable="true" data-field="HV">${row.HV || ""}</td>
+  <td contenteditable="true" data-field="MPXN2">${row.MPXN || ""}</td>
+  <td contenteditable="true" data-field="Id2">${row.Id || ""}</td>
+  <td contenteditable="true" data-field="JobCat">${row.JobCat || ""}</td>
+  <td contenteditable="true" data-field="JobDesc">${row.JobDesc || ""}</td>
+  <td contenteditable="true" data-field="ApptDate">${typeof row.ApptDate === 'number' ? new Date((row.ApptDate - 25569) * 86400 * 1000).toLocaleDateString('en-GB') : (row.ApptDate || "")}</td>
+  <td contenteditable="true" data-field="TimeSlot">${row.TimeSlot || ""}</td>
+  <td contenteditable="true" data-field="Comments">${row.Comments || ""}</td>
+  <td contenteditable="true" data-field="CustomerName">${row.CustomerName || ""}</td>
+  <td contenteditable="true" data-field="CustomerAddress">${row.CustomerAddress || ""}</td>
+  <td contenteditable="true" data-field="Postcode2">${row.Postcode || ""}</td>
+  <td contenteditable="true" data-field="SiteContactTelNo">${row.SiteContactTelNo || ""}</td>
+  <td contenteditable="true" data-field="OperativeGroup3">${row.OperativeGroup || ""}</td>
+  <td contenteditable="true" data-field="OperativeName2">${row.OperativeName || ""}</td>
+  <td contenteditable="true" data-field="OperativeName22">${row.OperativeName2 || ""}</td>
+  <td contenteditable="true" data-field="FTM">${row.FTM || ""}</td>
+  <td contenteditable="true" data-field="BookingAgent">${row.BookingAgent || ""}</td>
+  <td contenteditable="true" data-field="BookingDate">${typeof row.BookingDate === 'number' ? new Date((row.BookingDate - 25569) * 86400 * 1000).toLocaleDateString('en-GB') : (row.BookingDate || "")}</td>
+  <td contenteditable="true" data-field="Status">${row.Status || ""}</td>
+  <td contenteditable="true" data-field="VTRatio">${row["VT Ratio"] || ""}</td>
+  <td contenteditable="true" data-field="CTRatio">${row["CT Ratio"] || ""}</td>
+  <td contenteditable="true" data-field="SerialNumber">${row.SerialNumber || ""}</td>
+  <td contenteditable="true" data-field="EquipmentType">${row.EquipmentType || ""}</td>
+  <td contenteditable="true" data-field="Name">${row.Name || ""}</td>
+  <td contenteditable="true" data-field="MeterCOPRef">${row["Meter COP Ref"] || ""}</td>
+  <td contenteditable="true" data-field="SSC">${row.SSC || ""}</td>
+  <td contenteditable="true" data-field="RequestedSSC">${row.RequestedSSC || ""}`;
+
+      fragment.appendChild(tr);
+    }
+
+    tbody.appendChild(fragment);
+
+    // Add event listeners for editable cells
+    const editableCells = tbody.querySelectorAll('td[contenteditable="true"]');
+    editableCells.forEach(cell => {
+      cell.addEventListener('blur', function() {
+        const rowIndex = this.parentElement.dataset.rowIndex;
+        const field = this.dataset.field;
+        if (rowIndex !== undefined && field && VLData[rowIndex]) {
+          VLData[rowIndex][field] = this.textContent;
+          this.setAttribute('data-edited', 'true');
+        }
+      });
+    });
+
+    if (index < rows.length) {
+      requestAnimationFrame(renderChunk);
+    }
+  }
+
+  renderChunk();
+}
+
+/* ===== FAST VL ROW BUILDER (PAGINATED) ===== */
+function buildVLRow(row, rowIndex) {
+  const tr = document.createElement("tr");
+  tr.dataset.rowIndex = rowIndex;
+
+  tr.innerHTML = `
+    <td contenteditable="true" data-field="MPXN">${_vlFormatCell(row.MPXN || row.MPAN || "")}</td>
+    <td contenteditable="true" data-field="OperativeGroup">${_vlFormatCell(row.OperativeGroup || row.WorkStream || "")}</td>
+    <td contenteditable="true" data-field="Id">${_vlFormatCell(row.Id || row.JobNo || "")}</td>
+    <td contenteditable="true" data-field="OperativeName">${_vlFormatCell(row.OperativeName || row["Allocated To"] || "")}</td>
+    <td contenteditable="true" data-field="Postcode">${_vlFormatCell(row.Postcode || "")}</td>
+    <td contenteditable="true" data-field="OperativeGroup2">${_vlFormatCell(row.OperativeGroup || "")}</td>
+    <td contenteditable="true" data-field="PlanningNotes">${_vlFormatCell(row["Planning Note(s)"] || "")}</td>
+    <td contenteditable="true" data-field="HV">${_vlFormatCell(row.HV || "")}</td>
+    <td contenteditable="true" data-field="MPXN2">${_vlFormatCell(row.MPXN || "")}</td>
+    <td contenteditable="true" data-field="Id2">${_vlFormatCell(row.Id || "")}</td>
+    <td contenteditable="true" data-field="JobCat">${_vlFormatCell(row.JobCat || "")}</td>
+    <td contenteditable="true" data-field="JobDesc">${_vlFormatCell(row.JobDesc || "")}</td>
+    <td contenteditable="true" data-field="ApptDate">${_vlFormatCell(row.ApptDate || row.Date || "")}</td>
+    <td contenteditable="true" data-field="TimeSlot">${_vlFormatCell(row.TimeSlot || row["T/Band"] || "")}</td>
+    <td contenteditable="true" data-field="Comments">${_vlFormatCell(row.Comments || row["Additional Information"] || "")}</td>
+    <td contenteditable="true" data-field="CustomerName">${_vlFormatCell(row.CustomerName || "")}</td>
+    <td contenteditable="true" data-field="CustomerAddress">${_vlFormatCell(row.CustomerAddress || "")}</td>
+    <td contenteditable="true" data-field="Postcode2">${_vlFormatCell(row.Postcode || "")}</td>
+    <td contenteditable="true" data-field="SiteContactTelNo">${_vlFormatCell(row.SiteContactTelNo || "")}</td>
+    <td contenteditable="true" data-field="OperativeGroup3">${_vlFormatCell(row.OperativeGroup || "")}</td>
+    <td contenteditable="true" data-field="OperativeName2">${_vlFormatCell(row.OperativeName || "")}</td>
+    <td contenteditable="true" data-field="OperativeName22">${_vlFormatCell(row.OperativeName2 || "")}</td>
+    <td contenteditable="true" data-field="FTM">${_vlFormatCell(row.FTM || "")}</td>
+    <td contenteditable="true" data-field="BookingAgent">${_vlFormatCell(row.BookingAgent || "")}</td>
+    <td contenteditable="true" data-field="BookingDate">${_vlFormatCell(row.BookingDate || "")}</td>
+    <td contenteditable="true" data-field="Status">${_vlFormatCell(row.Status || "")}</td>
+    <td contenteditable="true" data-field="VTRatio">${_vlFormatCell(row["VT Ratio"] || "")}</td>
+    <td contenteditable="true" data-field="CTRatio">${_vlFormatCell(row["CT Ratio"] || "")}</td>
+    <td contenteditable="true" data-field="SerialNumber">${_vlFormatCell(row.SerialNumber || row["Serial Number"] || "")}</td>
+    <td contenteditable="true" data-field="EquipmentType">${_vlFormatCell(row.EquipmentType || row["Equipment Type"] || "")}</td>
+    <td contenteditable="true" data-field="Name">${_vlFormatCell(row.Name || "")}</td>
+    <td contenteditable="true" data-field="MeterCOPRef">${_vlFormatCell(row["Meter COP Ref"] || "")}</td>
+    <td contenteditable="true" data-field="SSC">${_vlFormatCell(row.SSC || "")}</td>
+    <td contenteditable="true" data-field="RequestedSSC">${_vlFormatCell(row.RequestedSSC || "")}</td>
+  `;
+
+  return tr;
+}
+/* ===== IMPORT VL PAGINATED RENDER + SEARCH ===== */
+function _vlFormatCell(value) {
+  if (value === null || value === undefined) return "";
+  // Convert Excel serial dates if passed in
+  if (typeof value === "number" && value > 20000 && value < 60000) {
+    try {
+      const d = new Date((value - 25569) * 86400 * 1000);
+      if (!isNaN(d)) return d.toLocaleDateString("en-GB");
+    } catch {}
+  }
+  return String(value);
+}
+
+function renderVLPage() {
+  const tbody = document.getElementById("importVLTableBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  const start = VL_STATE.page * VL_STATE.pageSize;
+  const end = start + VL_STATE.pageSize;
+
+  const fragment = document.createDocumentFragment();
+  const pageRows = (VL_STATE.filteredRows || []).slice(start, end);
+
+  pageRows.forEach((row, i) => {
+    fragment.appendChild(buildVLRow(row, start + i));
+  });
+
+  tbody.appendChild(fragment);
+}
+
+function updateVLPageLabel() {
+  const label = document.getElementById("vlPageLabel");
+  if (!label) return;
+
+  const total = (VL_STATE.filteredRows || []).length;
+  const totalPages = Math.max(1, Math.ceil(total / VL_STATE.pageSize));
+  label.textContent = `Page ${VL_STATE.page + 1} / ${totalPages} (${total} rows)`;
+}
+
+// One blur handler for ALL editable VL cells (fast)
+(function setupVLEditHandler(){
+  const tbody = document.getElementById("importVLTableBody");
+  if (!tbody) return;
+
+  tbody.addEventListener("blur", (e) => {
+    const cell = e.target;
+    if (!cell || cell.tagName !== "TD") return;
+    if (cell.getAttribute("contenteditable") !== "true") return;
+
+    const tr = cell.closest("tr");
+    const rowIndex = tr ? Number(tr.dataset.rowIndex) : NaN;
+    const field = cell.dataset.field;
+
+    if (!Number.isFinite(rowIndex) || !field) return;
+
+    // Write back to BOTH stores (so Save/Export always works)
+    const newValue = cell.textContent ?? "";
+
+    if (Array.isArray(VL_STATE.allRows) && VL_STATE.allRows[rowIndex]) {
+      VL_STATE.allRows[rowIndex][field] = newValue;
+    }
+    if (Array.isArray(VLData) && VLData[rowIndex]) {
+      VLData[rowIndex][field] = newValue;
+    }
+
+    cell.setAttribute("data-edited", "true");
+  }, true);
+})();
+
+// Search box (debounced) – filters then rerenders
+
+/* ===== IMPORT VL FILTERS ===== */
+function _vlGet(row, key) {
+  // Normalise field access across different export/header variants
+  if (!row) return "";
+  switch (key) {
+    case "workStream":
+      return row["Work Stream"] ?? row.WorkStream ?? row.Work_Stream ?? row.OperativeGroup ?? row.OperativeGroup2 ?? "";
+    case "allocatedTo":
+      return row["Allocated To"] ?? row.AllocatedTo ?? row.OperativeName ?? row.Operative ?? "";
+    case "operativeGroup":
+      return row["Operative Group"] ?? row.OperativeGroup ?? row.OperativeGroup3 ?? row.CapacityGroup ?? "";
+    case "hv":
+      return row.HV ?? row["HV"] ?? "";
+    case "apptDate":
+      return row.ApptDate ?? row["Appt Date"] ?? row["Appointment Date"] ?? "";
+    case "vtRatio":
+      return row["VT Ratio"] ?? row.VTRatio ?? row["VT_Ratio"] ?? "";
+    default:
+      return row[key] ?? "";
+  }
+}
+
+function _vlToDateMs(value) {
+  if (value === null || value === undefined || value === "") return null;
+
+  // Excel serial dates
+  if (typeof value === "number" && value > 20000 && value < 60000) {
+    const d = new Date((value - 25569) * 86400 * 1000);
+    return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  }
+
+  // Already formatted (dd/mm/yyyy)
+  const s = String(value).trim();
+  // ISO yyyy-mm-dd
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    const d = new Date(s + "T00:00:00");
+    return isNaN(d) ? null : d.getTime();
+  }
+  // dd/mm/yyyy
+  const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (m) {
+    const d = new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]));
+    return isNaN(d) ? null : d.getTime();
+  }
+
+  const d = new Date(s);
+  return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+}
+
+function populateVLFilterOptions() {
+  const wsSel = document.getElementById("vlFilterWorkStream");
+  const atSel = document.getElementById("vlFilterAllocatedTo");
+  const ogSel = document.getElementById("vlFilterOperativeGroup");
+  const hvSel = document.getElementById("vlFilterHV");
+  const vtSel = document.getElementById("vlFilterVTRatio");
+  if (!wsSel || !atSel || !ogSel || !hvSel || !vtSel) return;
+
+  const rows = VL_STATE.allRows || [];
+
+  function fill(selectEl, values) {
+    const keepFirst = selectEl.querySelector('option[value=""]');
+    selectEl.innerHTML = "";
+    if (keepFirst) selectEl.appendChild(keepFirst);
+    values.forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v;
+      opt.textContent = v;
+      selectEl.appendChild(opt);
+    });
+  }
+
+  const uniq = (arr) => Array.from(new Set(arr.map(v => String(v ?? "").trim()).filter(v => v))).sort((a,b)=>a.localeCompare(b));
+
+  fill(wsSel, uniq(rows.map(r => _vlFormatCell(_vlGet(r, "workStream")))));
+  fill(atSel, uniq(rows.map(r => _vlFormatCell(_vlGet(r, "allocatedTo")))));
+  fill(ogSel, uniq(rows.map(r => _vlFormatCell(_vlGet(r, "operativeGroup")))));
+  fill(hvSel, uniq(rows.map(r => _vlFormatCell(_vlGet(r, "hv")))));
+  fill(vtSel, uniq(rows.map(r => _vlFormatCell(_vlGet(r, "vtRatio")))));
+}
+
+function applyVLAllFilters() {
+  const q = (document.getElementById("vlSearchInput")?.value || "").trim().toLowerCase();
+
+  const ws = (document.getElementById("vlFilterWorkStream")?.value || "").trim().toLowerCase();
+  const at = (document.getElementById("vlFilterAllocatedTo")?.value || "").trim().toLowerCase();
+  const og = (document.getElementById("vlFilterOperativeGroup")?.value || "").trim().toLowerCase();
+  const hv = (document.getElementById("vlFilterHV")?.value || "").trim().toLowerCase();
+  const vt = (document.getElementById("vlFilterVTRatio")?.value || "").trim().toLowerCase();
+
+  const fromVal = document.getElementById("vlFilterApptFrom")?.value || "";
+  const toVal = document.getElementById("vlFilterApptTo")?.value || "";
+  const fromMs = fromVal ? _vlToDateMs(fromVal) : null;
+  const toMs = toVal ? (_vlToDateMs(toVal) + 24*60*60*1000 - 1) : null;
+
+  const base = VL_STATE.allRows || [];
+
+  VL_STATE.filteredRows = base.filter(row => {
+    if (ws && _vlFormatCell(_vlGet(row, "workStream")).toLowerCase() !== ws) return false;
+    if (at && _vlFormatCell(_vlGet(row, "allocatedTo")).toLowerCase() !== at) return false;
+    if (og && _vlFormatCell(_vlGet(row, "operativeGroup")).toLowerCase() !== og) return false;
+    if (hv && _vlFormatCell(_vlGet(row, "hv")).toLowerCase() !== hv) return false;
+    if (vt && _vlFormatCell(_vlGet(row, "vtRatio")).toLowerCase() !== vt) return false;
+
+    if (fromMs || toMs) {
+      const dMs = _vlToDateMs(_vlGet(row, "apptDate"));
+      if (dMs === null) return false;
+      if (fromMs !== null && dMs < fromMs) return false;
+      if (toMs !== null && dMs > toMs) return false;
+    }
+
+    if (q) {
+      return Object.values(row || {}).some(v => _vlFormatCell(v).toLowerCase().includes(q));
+    }
+    return true;
+  });
+
+  VL_STATE.page = 0;
+  renderVLPage();
+  updateVLPageLabel();
+}
+
+(function setupVLFilters(){
+  const ids = [
+    "vlFilterWorkStream",
+    "vlFilterAllocatedTo",
+    "vlFilterOperativeGroup",
+    "vlFilterHV",
+    "vlFilterVTRatio",
+    "vlFilterApptFrom",
+    "vlFilterApptTo"
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("change", applyVLAllFilters);
+  });
+
+  const clearBtn = document.getElementById("vlClearFiltersBtn");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = "";
+      });
+      applyVLAllFilters();
+    });
+  }
+})();
+
+(function setupVLSearch(){
+  const input = document.getElementById("vlSearchInput");
+  if (!input) return;
+
+  let t = null;
+
+  input.addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      applyVLAllFilters();
+    }, 150);
+});
+})();
+
+// Prev/Next paging
+(function setupVLPaging(){
+  const prev = document.getElementById("vlPrevPageBtn");
+  const next = document.getElementById("vlNextPageBtn");
+  if (!prev || !next) return;
+
+  prev.addEventListener("click", () => {
+    if (VL_STATE.page > 0) {
+      VL_STATE.page--;
+      renderVLPage();
+      updateVLPageLabel();
+    }
+  });
+
+  next.addEventListener("click", () => {
+    const total = (VL_STATE.filteredRows || []).length;
+    const totalPages = Math.max(1, Math.ceil(total / VL_STATE.pageSize));
+    if (VL_STATE.page < totalPages - 1) {
+      VL_STATE.page++;
+      renderVLPage();
+      updateVLPageLabel();
+    }
+  });
+})();
+
+
+/* ---------- IMPORT EXCEL (.xlsx) BUTTON ---------- */
+
+// 1. Refactor Excel processing logic into a separate function
+async function loadExcelFileIntoNoAvailabilityTable(file) {
+    return new Promise((resolve, reject) => {
+        if (!file) {
+            alert("Please choose an Excel file.");
+            reject("No file chosen");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: "array" });
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+            const tbody = document.getElementById("noAvailabilityTableBody");
+            tbody.innerHTML = "";
+
+            rows.forEach(row => {
+                addNoAvailabilityRow({
+                    Id: row.Id,
+                    MPXN: row.MPXN,
+                    Postcode: row.Postcode,
+                    EngineerGroup: row.EngineerGroup,
+                    CapacityGroup: row.CapacityGroup,
+                    JobType: row.JobType,
+                    ApptDate: row.ApptDate,
+                    TimeSlot: row.TimeSlot,
+                    CreatedDate: row.CreatedDate,
+                    BookedByUser: row.BookedByUser,
+                    CustomerAddress: row.CustomerAddress,
+                    CustomerName: row.CustomerName,
+                    AllocatedStartTime: row.AllocatedStartTime,
+                    Comments: row.Comments,
+                    Status: row.Status,
+                    RequestedEnergisationStatus: row.RequestedEnergisationStatus,
+                    RequestedSSC: row.RequestedSSC,
+                    SpecificCapacityOnApptDate: row.SpecificCapacityOnApptDate,
+                    DateCapacityLastUpdated: row.DateCapacityLastUpdated
+                });
+            });
+
+            alert(`Imported ${rows.length} rows from ${file.name} into No Availability.`);
+            resolve();
+        };
+
+        reader.onerror = function(error) {
+            console.error("Error reading file:", error);
+            reject(error);
+        };
+
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+// 2. Update the "Import Excel" button's event listener
+document.getElementById("availabilityExcelBtn").addEventListener("click", async () => {
+    const fileInput = document.getElementById("excelFileNA");
+    const file = fileInput.files[0];
+
+    try {
+        await loadExcelFileIntoNoAvailabilityTable(file);
+    } catch (error) {
+        console.error("Error loading Excel file:", error);
+    }
+});
+
+// 3. Integrate with Folder Selection
+// When "Select Folder" is clicked, open the hidden folder input
+// When "Select Folder" is clicked, open the hidden folder input
+document.getElementById('selectFolderBtn').addEventListener('click', () => {
+    document.getElementById('folderInput').click();
+});
+
+// When a folder is selected, process its files
+document.getElementById('folderInput').addEventListener('change', async (event) => {
+    console.log('Folder input change event triggered'); // Debugging line
+
+    const files = Array.from(event.target.files); // FileList -> Array
+
+    console.log('Files:', files); // Debugging line
+
+    // Filter for Excel files only (adjust extensions if needed)
+    const excelFiles = files.filter(f =>
+        f.name.toLowerCase().endsWith('.xlsx') || f.name.toLowerCase().endsWith('.xls')
+    );
+
+    if (excelFiles.length === 0) {
+        alert('No Excel files found in that folder.');
+        return;
+    }
+
+    // Populate the dropdown with all Excel files from the folder
+    const fileDropdown = document.getElementById('fileDropdown');
+    fileDropdown.innerHTML = ''; // clear
+
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = `Select a file to import`;
+    fileDropdown.appendChild(defaultOption);
+
+    excelFiles.forEach((file, index) => {
+        const option = document.createElement('option');
+        option.value = index; // store index of file in excelFiles array
+        option.textContent = file.name;
+        fileDropdown.appendChild(option);
+    });
+
+    // If you want to allow the user to choose which file in the dropdown to load:
+    fileDropdown.onchange = async function() {
+        const idx = this.value;
+        if (idx === '') return;
+        const selectedFile = excelFiles[Number(idx)];
+        try {
+            await loadExcelFileIntoNoAvailabilityTable(selectedFile);
+        } catch (error) {
+            console.error("Error loading Excel file:", error);
+        }
+    };
+});
+
+
+
+/* ---------- JOBS RENDER & LOGIC ---------- */
+function renderJobsSummary(){
+  ensureWeekKey(currentWeekKey);
+  const week = store.weeks[currentWeekKey];
+  const container = document.getElementById('jobsSummary');
+  container.innerHTML='';
+  if(!week.jobs || week.jobs.length===0){
+    container.innerHTML = '<em>No jobs added for this week</em>';
+    return;
+  }
+  const tbl = document.createElement('table');
+  tbl.style.width='100%';
+  tbl.style.borderCollapse='collapse';
+tbl.innerHTML = `
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Postcode</th>
+      <th>MPAN</th>
+      <th>Job Type</th>
+      <th>Requestor</th>
+      <th>Status</th>
+      <th>Chase</th>
+    </tr>
+  </thead>`;
+
+  const tb = document.createElement('tbody');
+
+  week.jobs.forEach((j, idx)=>{
+    // apply filterStatus if set
+    const fStatus = document.getElementById('filterStatus').value;
+    if(fStatus && j.status !== fStatus) return;
+
+    const tr = document.createElement('tr');
+
+    const statusOptions = ['pending','agreed','cancelled'].map(s=>`<option value="${s}" ${s===j.status?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('');
+    const chasedTick = j.chasedTick ? '<span class="tick">✅</span>' : '';
+ tr.innerHTML = `
+  <td>${escapeHtml(j.name||'')}</td>
+  <td>${escapeHtml(j.date||'')}</td>
+  <td>${escapeHtml(j.postcode||'')}</td>
+  <td>${escapeHtml(j.mpan||'')}</td>
+  <td>${escapeHtml(j.jobType||'')}</td>
+  <td>${escapeHtml(j.requestor||'')}</td>
+  <td>
+    <select data-idx="${idx}" class="jobStatusSelect">
+      ${statusOptions}
+    </select>
+  </td>
+  <td>
+    <button data-idx="${idx}" class="smallBtn chaseBtn">Chase</button>
+    ${chasedTick}
+  `;
+    tb.appendChild(tr);
+  });
+
+  tbl.appendChild(tb);
+  container.appendChild(tbl);
+
+  // Attach onchange events
+  document.querySelectorAll('.jobStatusSelect').forEach(sel=>{
+    sel.onchange = function(){
+      const idx = Number(this.dataset.idx);
+      const job = week.jobs[idx];
+      const oldStatus = job.status;
+      job.status = this.value;
+
+      // If agreed or cancelled -> move to jobsAgreedCancelled
+      if(job.status==='agreed' || job.status==='cancelled'){
+        store.jobsAgreedCancelled = store.jobsAgreedCancelled || [];
+        store.jobsAgreedCancelled.push({...job});
+        week.jobs.splice(idx,1);
+      } else if(job.status==='chased'){
+        job.chasedTick = true;
+        openChaseEmail(job);
+      }
+      saveStore();
+      renderJobsSummary();
+      renderJobsAC();
+    };
+  });
+
+  // attach chase buttons
+  document.querySelectorAll('.chaseBtn').forEach(b=>{
+    b.onclick = function(){
+      const idx = Number(this.dataset.idx);
+      const job = week.jobs[idx];
+      job.chasedTick = true;
+      job.status = 'chased';
+      saveStore();
+      openChaseEmail(job);
+      renderJobsSummary();
+      renderJobsAC();
+    };
+  });
+}
+
+function renderJobsAC(){
+  const tbody = document.querySelector('#jobsAC tbody');
+  tbody.innerHTML='';
+
+  const pjFilter = document.getElementById('paperJobFilter')
+    ? document.getElementById('paperJobFilter').value
+    : '';
+
+  // ===== Filter by current W/C (Mon–Fri) =====
+  // We use the same week selected by the top Monday picker.
+  const wcInput = document.getElementById('mondayPicker');
+  const wcVal = wcInput && wcInput.value ? wcInput.value : (typeof currentWeekKey !== 'undefined' ? currentWeekKey : '');
+
+  // Parse YYYY-MM-DD (from mondayPicker/currentWeekKey) to Date at 00:00
+  let weekStart = null;
+  if (wcVal) {
+    // Ensure we only take the date part
+    const iso = String(wcVal).slice(0,10);
+    const d = new Date(iso + "T00:00:00");
+    if (!isNaN(d)) weekStart = d;
+  }
+
+  // Week end = Friday 23:59:59 (Mon + 4 days)
+  let weekEnd = null;
+  if (weekStart) {
+    weekEnd = new Date(weekStart.getTime());
+    weekEnd.setDate(weekEnd.getDate() + 4);
+    weekEnd.setHours(23,59,59,999);
+  }
+
+  // Parse job dates which are stored like "dd/mm/yyyy" (from formatDateFriendly)
+  function parseDDMMYYYY(s){
+    if(!s) return null;
+    const m = String(s).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if(!m) return null;
+    const dd = Number(m[1]), mm = Number(m[2]) - 1, yyyy = Number(m[3]);
+    const d = new Date(yyyy, mm, dd);
+    return isNaN(d) ? null : d;
+  }
+
+  (store.jobsAgreedCancelled||[]).forEach(j=>{
+    if (pjFilter === 'paper' && !j.paperJob) return;
+    if (pjFilter === 'nonpaper' && j.paperJob) return;
+
+    // Only show jobs whose "Date" falls within this W/C week (Mon–Fri)
+    if (weekStart && weekEnd) {
+      const jd = parseDDMMYYYY(j.date);
+      if (!jd) return; // if we can't parse the job date, don't show it in week view
+      const ts = jd.getTime();
+      if (ts < weekStart.getTime() || ts > weekEnd.getTime()) return;
+    }
+
+    const tr=document.createElement('tr');
+    tr.style.backgroundColor = j.status==='agreed' ? '#0b8a4f33' : (j.status==='cancelled' ? '#c6282833' : 'transparent');
+    const chasedTick = j.chasedTick ? '<span class="tick">✅</span>' : '';
+    tr.innerHTML = `
+      <td>${escapeHtml(j.name||'')}</td>
+      <td>${escapeHtml(j.date||'')}</td>
+      <td>${escapeHtml(j.postcode||'')}</td>
+      <td>${escapeHtml(j.mpan||'')}</td>
+      <td>${escapeHtml(j.requestor||'')}</td>
+      <td>${escapeHtml(j.jobType||'')}</td>
+      <td>${escapeHtml(j.dateAgreed||'')}</td>
+      <td>${escapeHtml(j.notes||'')}</td>
+      <td style="font-weight:700;color:${j.status==='cancelled'?'#c00':'#088'}">${escapeHtml(j.status||'')}</td>
+      <td>${j.paperJob ? 'Yes' : 'No'}</td>
+      <td>${chasedTick}`;
+    tbody.appendChild(tr);
+  });
+}
+
+
+/* helper: open mailto for a job (chase) */
+function openChaseEmail(job){
+  const to = job.requestor ? job.requestor : '';
+  const cc = 'esuk-Complex@eonenergy.com';
+  const subject = encodeURIComponent(`Chase: ${job.name || ''} / ${job.jobType || ''}`);
+  const bodyLines = [
+    `Hello,`,
+    ``,
+    `Chasing job for: ${job.name || ''}`,
+    `Date: ${job.date || ''}`,
+    `Postcode: ${job.postcode || ''}`,
+    `MPAN: ${job.mpan || ''}`,
+    `Job Type: ${job.jobType || ''}`,
+    `Notes: ${job.notes || ''}`,
+    ``,
+    `Thanks,`
+  ];
+  const body = encodeURIComponent(bodyLines.join('\n'));
+  const mailto = `mailto:${encodeURIComponent(to)}?cc=${encodeURIComponent(cc)}&subject=${subject}&body=${body}`;
+  window.location.href = mailto;
+}
+
+/* Save job form */
+document.getElementById('newJobForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const isPaperJob = document.getElementById("paperJobCheckbox")?.checked || false; ensureWeekKey(currentWeekKey);
+  const week = store.weeks[currentWeekKey];
+  const obj = {
+    name: document.getElementById('jobEngineer').value || '',
+    date: formatDateFriendly(document.getElementById('jobDate').value),
+    postcode: document.getElementById('jobPost').value || '',
+    mpan: document.getElementById('jobMpan').value || '',
+    requestor: document.getElementById('jobRequestor').value || '',
+    jobType: document.getElementById('jobType').value || '',
+    dateAgreed: formatDateFriendly(document.getElementById('jobDateAgreed').value),
+    notes: document.getElementById('jobNotes').value || '',
+    paperJob: isPaperJob,
+    status: document.getElementById('jobStatus').value || 'pending',
+    chasedTick: document.getElementById('jobStatus').value === 'chased'
+  };
+  if(obj.status === 'agreed' || obj.status === 'cancelled'){
+    store.jobsAgreedCancelled = store.jobsAgreedCancelled || [];
+    store.jobsAgreedCancelled.push(obj);
+  } else {
+    week.jobs = week.jobs || [];
+    week.jobs.push(obj);
+  }
+  saveStore();
+  renderJobsSummary(); renderJobsAC();
+  alert('Job saved.');
+  this.reset();
+});
+
+/* ---------- CSV PARSE & IMPORT (fixed for static headers) ---------- */
+document.getElementById('parseCsv').addEventListener('click', () => {
+  const txt = document.getElementById('pasteCsv').value.trim();
+  if (!txt) { alert('Paste CSV first'); return; }
+
+  const lines = txt.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+  if (!lines.length) { alert('No rows found'); return; }
+
+  // Read headers + rows from CSV
+  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+  const rows = lines.slice(1).map(r =>
+    r.split(',').map(c => c.trim().replace(/"/g, ''))
+  );
+
+  // IMPORTANT: only clear the body, not the whole div
+  const body = document.getElementById('csvPreviewBody');
+  body.innerHTML = '';
+
+  // Insert rows
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    headers.forEach((h, i) => {
+      const td = document.createElement('td');
+      td.textContent = row[i] || '';
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+
+  window.__parsedCsv = { headers, rows };
+
+  alert('Parsed ' + rows.length + ' rows. Click Import to add to this week.');
+});
+
+
+
+// ---------- IMPORT TO WEEK ----------
+document.getElementById('importCsv').addEventListener('click', () => {
+  if (!window.__parsedCsv) { alert('Parse CSV first'); return; }
+
+  ensureWeekKey(currentWeekKey);
+
+  const { headers, rows } = window.__parsedCsv;
+
+  // create lookup map (case-insensitive, remove spaces)
+  const map = {};
+  headers.forEach((h, i) => map[h.toLowerCase().replace(/\s+/g, '')] = i);
+
+  const week = store.weeks[currentWeekKey];
+
+  rows.forEach(r => {
+    const job = {
+      name: r[map['allocatedto'] || map['name'] || 0] || '',
+      mpan: r[map['mpan']] || '',
+      postcode: r[map['p/code'] || map['postcode']] || '',
+      jobType: r[map['jobtypedescription'] || map['jobtype']] || '',
+      date: r[map['date']] || '',
+      tband: r[map['t/band'] || map['timeslot']] || '',
+      notes: r[map['additionalinformation'] || map['notes']] || '',
+
+      // defaults
+      status: 'pending',
+      chasedTick: false
+    };
+
+    week.jobs.push(job);
+  });
+
+  saveStore();
+  renderJobsSummary();
+
+  alert('Imported ' + rows.length + ' rows.');
+});
+
+
+/* ---------- ADMIN ---------- */
+
+// ADD / SAVE engineer
+document.getElementById('addEng').addEventListener('click', () => {
+  const name = document.getElementById('a_name').value.trim();
+  if (!name) { alert('Enter name'); return; }
+
+  const eng = {
+    name: name,
+    post: document.getElementById('a_post').value.trim(),
+    skill: document.getElementById('a_skill').value.trim(),
+    ftl: document.getElementById('a_ftl').value.trim(),
+    ftlEmail: document.getElementById('a_ftl_email').value.trim(),
+    phone: document.getElementById('a_phone').value.trim(),
+    stream: document.getElementById('a_stream').value.trim(),
+    email: document.getElementById('a_email').value.trim()
+  };
+
+  // EDIT MODE: update existing engineer
+  if (typeof store.currentEditEngineerIndex === 'number') {
+    const idx = store.currentEditEngineerIndex;
+    const oldName = store.masterEngineers[idx].name;
+
+    // Update master list
+    store.masterEngineers[idx] = eng;
+    store.masterEngineers.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Update all weeks (replace matching name with updated object)
+    Object.keys(store.weeks).forEach(weekKey => {
+      const weekEngineers = store.weeks[weekKey].engineers || [];
+      weekEngineers.forEach((we, wIdx) => {
+        if (we.name === oldName) {
+          weekEngineers[wIdx] = JSON.parse(JSON.stringify(eng));
+        }
+      });
+      weekEngineers.sort((a, b) => a.name.localeCompare(b.name));
+    });
+
+    // Exit edit mode
+    delete store.currentEditEngineerIndex;
+    document.getElementById('addEng').textContent = 'Add engineer';
+
+  } else {
+    // ADD MODE: add to master and to existing weeks
+    store.masterEngineers.push(eng);
+    store.masterEngineers.sort((a, b) => a.name.localeCompare(b.name));
+
+    Object.keys(store.weeks).forEach(k => {
+      const weekEngineers = store.weeks[k].engineers;
+      weekEngineers.push(JSON.parse(JSON.stringify(eng)));
+      weekEngineers.sort((a, b) => a.name.localeCompare(b.name));
+    });
+  }
+
+  saveStore();
+  renderAdminEngineers();
+  renderEngineersTable();
+  populateJobFormSelects();
+  renderRotaEngineersList();
+
+  // clear inputs
+  document.getElementById('a_name').value = '';
+  document.getElementById('a_post').value = '';
+  document.getElementById('a_skill').value = '';
+  document.getElementById('a_ftl').value = '';
+  document.getElementById('a_ftl_email').value = '';
+  document.getElementById('a_email').value = '';
+  document.getElementById('a_stream').value = '';
+  document.getElementById('a_phone').value = '';
+});
+
+
+function renderAdminEngineers() {
+  const tbody = document.querySelector('#adminEngineers tbody');
+  tbody.innerHTML = '';
+
+  store.masterEngineers.forEach((e, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escapeHtml(e.name)}</td>
+      <td>${escapeHtml(e.post || '')}</td>
+      <td>${escapeHtml(e.skill || '')}</td>
+      <td>${escapeHtml(e.ftl || '')}</td>
+      <td>${escapeHtml(e.phone || '')}</td>
+      <td>${escapeHtml(e.stream || '')}</td>
+      <td>${escapeHtml(e.email || '')}</td>
+      <td>${escapeHtml(e.ftlEmail || '')}</td>
+      <td><button data-i="${i}" class="editMasterEng smallBtn">Edit</button></td>
+      <td><button data-i="${i}" class="removeMasterEng smallBtn">Remove</button>`;
+    tbody.appendChild(tr);
+  });
+
+  // REMOVE handlers
+  document.querySelectorAll('.removeMasterEng').forEach(b => b.onclick = () => {
+    const i = Number(b.dataset.i);
+    const engineerName = store.masterEngineers[i].name;
+
+    if (!confirm(`Remove engineer "${engineerName}"? This removes them from all weeks.`)) return;
+
+    // Remove from master list
+    store.masterEngineers = store.masterEngineers.filter(e => e.name !== engineerName);
+
+    // Remove from all weekly lists
+    Object.keys(store.weeks).forEach(weekKey => {
+      const week = store.weeks[weekKey];
+      if (week.engineers && Array.isArray(week.engineers)) {
+        week.engineers = week.engineers.filter(e => e.name !== engineerName);
+      }
+    });
+
+    saveStore();
+
+    // Re-render UI
+    renderAdminEngineers();
+    renderEngineersTable();
+    renderNotesTab();
+    populateJobFormSelects();
+    renderRotaEngineersList();
+
+    console.log('Engineer removed:', engineerName);
+  });
+
+  // EDIT handlers
+document.querySelectorAll('.editMasterEng').forEach(b => b.onclick = () => {
+  const i = Number(b.dataset.i);
+  const eng = store.masterEngineers[i];
+
+  // Populate the form fields
+  document.getElementById('a_name').value      = eng.name || '';
+  document.getElementById('a_post').value      = eng.post || '';
+  document.getElementById('a_skill').value     = eng.skill || '';
+  document.getElementById('a_ftl').value       = eng.ftl || '';
+  document.getElementById('a_ftl_email').value = eng.ftlEmail || '';
+  document.getElementById('a_phone').value     = eng.phone || '';
+  document.getElementById('a_stream').value    = eng.stream || '';
+  document.getElementById('a_email').value     = eng.email || '';
+
+  // Mark edit mode
+  store.currentEditEngineerIndex = i;
+  document.getElementById('addEng').textContent = 'Save engineer';
+
+  // Scroll to top smoothly
+ window.scrollTo(0, 0);
+});
+}
+
+
+
+function renderStreams(){ const ul=document.getElementById('streamsList'); ul.innerHTML=''; store.masterStreams.forEach((s,i)=>{ const li=document.createElement('li'); li.textContent = s + ' '; const rem=document.createElement('button'); rem.className='smallBtn'; rem.textContent='Remove'; rem.onclick=()=>{ if(confirm('Remove stream?')){ store.masterStreams.splice(i,1); Object.keys(store.weeks).forEach(k=>{ const idx=store.weeks[k].streams.indexOf(s); if(idx>-1) store.weeks[k].streams.splice(idx,1); }); saveStore(); renderStreams(); } }; li.appendChild(rem); ul.appendChild(li); }); }
+
+/* ---------- NOTES TAB ---------- */
+function ensureNotesRanges(){
+  store.noteRanges = store.noteRanges || {}; // { "Engineer Name": [{from:"YYYY-MM-DD",to:"YYYY-MM-DD",text:"..."}] }
+}
+
+function addDaysISO(iso, days){
+  const d = new Date(iso);
+  d.setDate(d.getDate() + Number(days || 0));
+  return isoDate(d);
+}
+
+function normalizeISO(iso){
+  if(!iso) return '';
+  // Expect YYYY-MM-DD from <input type="date">
+  return String(iso).slice(0,10);
+}
+
+function rangesOverlap(aFrom, aTo, bFrom, bTo){
+  const af = new Date(aFrom).getTime();
+  const at = new Date(aTo).getTime();
+  const bf = new Date(bFrom).getTime();
+  const bt = new Date(bTo).getTime();
+  if([af,at,bf,bt].some(Number.isNaN)) return false;
+  return af <= bt && bf <= at; // inclusive overlap
+}
+
+function getNoteForExactRange(engineerName, fromIso, toIso){
+  ensureNotesRanges();
+  const arr = store.noteRanges[engineerName] || [];
+  const f = normalizeISO(fromIso);
+  const t = normalizeISO(toIso);
+  const hit = arr.find(x => normalizeISO(x.from) === f && normalizeISO(x.to) === t);
+  return hit ? (hit.text || '') : '';
+}
+
+function upsertNoteForExactRange(engineerName, fromIso, toIso, text){
+  ensureNotesRanges();
+  const f = normalizeISO(fromIso);
+  const t = normalizeISO(toIso);
+  if(!f || !t) return;
+
+  store.noteRanges[engineerName] = store.noteRanges[engineerName] || [];
+  const arr = store.noteRanges[engineerName];
+
+  const idx = arr.findIndex(x => normalizeISO(x.from) === f && normalizeISO(x.to) === t);
+
+  const cleaned = String(text || '').trimEnd();
+  if(cleaned.trim() === ''){
+    // delete empty note for this range
+    if(idx > -1) arr.splice(idx, 1);
+  }else{
+    const obj = { from: f, to: t, text: cleaned };
+    if(idx > -1) arr[idx] = obj;
+    else arr.push(obj);
+  }
+
+  saveStore();
+}
+
+function getNotesOverlappingRange(engineerName, fromIso, toIso){
+  ensureNotesRanges();
+  const f = normalizeISO(fromIso);
+  const t = normalizeISO(toIso);
+  const arr = (store.noteRanges[engineerName] || []).slice();
+
+  // include only overlaps, sort by from then to
+  return arr
+    .filter(x => x?.from && x?.to && rangesOverlap(f, t, x.from, x.to) && String(x.text || '').trim() !== '')
+    .sort((a,b) => (a.from||'').localeCompare(b.from||'') || (a.to||'').localeCompare(b.to||''));
+}
+
+function renderNotesTab(){
+  // Default range = current week (Mon -> Fri)
+  const fromEl = document.getElementById('notesFrom');
+  const toEl   = document.getElementById('notesTo');
+
+  if(fromEl && !fromEl.value) fromEl.value = currentWeekKey;
+  if(toEl && !toEl.value) toEl.value = addDaysISO((fromEl && fromEl.value) ? fromEl.value : currentWeekKey, 4);
+
+  const fromVal = fromEl?.value || currentWeekKey;
+  const toVal = toEl?.value || addDaysISO(currentWeekKey, 4);
+
+  const cont = document.getElementById('notesContainer');
+  if(!cont) return;
+  cont.innerHTML = '';
+
+  // Use master engineers (always the source of truth)
+  const engineers = Array.isArray(store.masterEngineers) ? store.masterEngineers : [];
+  engineers.forEach((e, i) => {
+    const name = e?.name || '';
+    if(!name) return;
+
+    const div = document.createElement('div');
+    div.className = 'noteRow';
+
+    const existing = getNoteForExactRange(name, fromVal, toVal);
+
+    div.innerHTML = `
+      <div class="noteLeft"><strong>${escapeHtml(name)}</strong></div>
+      <div class="noteRight">
+        <textarea data-name="${escapeHtml(name)}" rows="3" style="width:100%">${escapeHtml(existing)}</textarea>
+      </div>
+    `;
+    cont.appendChild(div);
+  });
+
+  // Save handlers
+  document.querySelectorAll('#notesContainer textarea').forEach(txt => {
+    txt.onchange = function(){
+      const engineerName = this.getAttribute('data-name') || '';
+      upsertNoteForExactRange(engineerName, fromVal, toVal, this.value);
+    };
+  });
+
+  // Wire up load button once
+  const loadBtn = document.getElementById('notesLoadRangeBtn');
+  if(loadBtn && !loadBtn.dataset.bound){
+    loadBtn.dataset.bound = '1';
+    loadBtn.addEventListener('click', () => renderNotesTab());
+  }
+}
+
+/* ---------- EXPORT WEEK CSV (simple) ---------- */
+document.getElementById('exportCSV').addEventListener('click', ()=>{
+  ensureWeekKey(currentWeekKey); const week = store.weeks[currentWeekKey];
+  let csv = 'Engineer,Postcode,Skill,FTL,Mon,Tue,Wed,Thu,Fri,Stream,Hotel,Info,Notes\n';
+  week.engineers.forEach((e,idx)=>{ const getVal=(d)=> { let v = week.engineerCells && week.engineerCells[`${idx}_${d}`] ? week.engineerCells[`${idx}_${d}`] : ''; if(typeof v === 'object') try{ v = JSON.stringify(v);}catch(err){ v = String(v);} return (v||''); }; const note = week.notes && week.notes[idx] ? week.notes[idx] : ''; csv += `"${(e.name||'').toString().replace(/"/g,'""')}","${(e.post||'').toString().replace(/"/g,'""')}","${(e.skill||'').toString().replace(/"/g,'""')}","${(e.ftl||'').toString().replace(/"/g,'""')}","${getVal(0).toString().replace(/"/g,'""')}","${getVal(1).toString().replace(/"/g,'""')}","${getVal(2).toString().replace(/"/g,'""')}","${getVal(3).toString().replace(/"/g,'""')}","${getVal(4).toString().replace(/"/g,'""')}","${(e.stream||'').toString().replace(/"/g,'""')}","${(e.hotel||'').toString().replace(/"/g,'""')}","${(e.info||'').toString().replace(/"/g,'""')}","${(note||'').toString().replace(/"/g,'""')}"\n`; });
+  const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='WeeklyHandover_'+currentWeekKey+'.csv'; document.body.appendChild(a); a.click(); a.remove();
+});
+
+/* ---------- EXPORT ROWS format ---------- */
+document.getElementById('exportRowsBtn').addEventListener('click', ()=>{
+  ensureWeekKey(currentWeekKey);
+  const week = store.weeks[currentWeekKey];
+  let rows = [];
+  week.jobs && week.jobs.forEach(j=>{
+    const row = [
+      j.name || '',
+      j.mpan || '',
+      j.postcode || '',
+      j.jobType || '',
+      j.date || '',
+      '',
+      j.notes || ''
+    ];
+    rows.push(row);
+  });
+  let csv = rows.map(r => r.map(c => `"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+  if(!csv) csv = '';
+  const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='ExportRows_'+currentWeekKey+'.csv'; document.body.appendChild(a); a.click(); a.remove();
+});
+
+/* ---------- CLEAR WEEK ---------- */
+document.getElementById('clearWeekBtn').addEventListener('click', ()=>{ if(!confirm('Clear day cells and week jobs?')) return; ensureWeekKey(currentWeekKey); const w = store.weeks[currentWeekKey]; w.engineerCells = {}; w.comments = {}; w.colors = {}; w.textColors = {}; w.jobs = []; saveStore(); renderEngineersTable(); renderJobsSummary(); renderJobsAC(); renderNotesTab(); });
+
+/* ---------- TAB NAV ---------- */
+document.querySelectorAll('nav button').forEach(btn=>btn.addEventListener('click', ()=>{
+  const id = btn.dataset.tab; document.querySelectorAll('main .panel, main section').forEach(s=>s.classList.add('hidden'));
+  const el = document.getElementById(id); if(el){ el.classList.remove('hidden'); el.setAttribute('aria-hidden','false'); }
+  if(id==='jobs') renderJobsAC();
+  if(id==='notes') renderNotesTab();
+}));
+
+/* ---------- PREV/NEXT & PICKER ---------- */
+document.getElementById('prevWeek').addEventListener('click', ()=>{ const d=new Date(currentMonday); d.setDate(d.getDate()-7); setCurrentMonday(d); });
+document.getElementById('nextWeek').addEventListener('click', ()=>{ const d=new Date(currentMonday); d.setDate(d.getDate()+7); setCurrentMonday(d); });
+document.getElementById('mondayPicker').addEventListener('change', ()=>{ setCurrentMonday(new Date(document.getElementById('mondayPicker').value)); });
+function setCurrentMonday(d){ currentMonday = startOfMonday(d); currentWeekKey = isoDate(currentMonday); ensureWeekKey(currentWeekKey); renderDatesRow(); renderEngineersTable(); renderJobsSummary(); renderJobsAC(); renderNotesTab(); populateJobFormSelects(); }
+
+/* ---------- POPULATE SELECTS & FILTERS ---------- */
+function populateJobFormSelects(){
+  ensureWeekKey(currentWeekKey);
+  const week = store.weeks[currentWeekKey];
+
+  // Populate jobEngineer select (jsel) - no changes needed here as it's not related to the filters
+  const jsel=document.getElementById('jobEngineer'); jsel.innerHTML='<option value=""></option>';
+  week.engineers.forEach(e=>{ const opt=document.createElement('option'); opt.value=e.name; opt.textContent=e.name; jsel.appendChild(opt); });
+
+  // Populate filterStream select (js2) - Add "(All)" option
+  const js2=document.getElementById('filterStream'); js2.innerHTML='<option value="">(All)</option>';
+  const streams = new Set(week.engineers.map(e=>e.ftl||e.stream||'').filter(Boolean));
+  Array.from(streams).sort().forEach(s=>{ const opt=document.createElement('option'); opt.value=s; opt.textContent=s; js2.appendChild(opt); });
+
+  // Populate filterEngineer select (fe) - Add "(All)" option
+const fe = document.getElementById('filterEngineer');
+
+// Always include (All) and A–Z
+fe.innerHTML = `
+  <option value="">(All)</option>
+  <option value="az">A–Z</option>
+`;
+
+// Add engineer names
+week.engineers.forEach(e=>{
+   const opt=document.createElement('option');
+   opt.value=e.name;
+   opt.textContent=e.name;
+   fe.appendChild(opt);
+});
+
+}
+
+document.getElementById('resetFilters').addEventListener('click', ()=>{
+  document.getElementById('filterEngineer').value=''; document.getElementById('filterStream').value=''; document.getElementById('filterStatus').value='';
+  renderEngineersTable(); renderJobsSummary();
+});
+document.getElementById('filterEngineer').addEventListener('change', ()=> renderEngineersTable());
+document.getElementById('filterStream').addEventListener('change', ()=> renderEngineersTable());
+document.getElementById('filterPlannedArea').addEventListener('change', ()=> renderEngineersTable());
+document.getElementById('filterStatus').addEventListener('change', ()=> renderJobsSummary());
+
+/* ---------- CHASE ALL ---------- */
+document.getElementById('chaseAllBtn').addEventListener('click', ()=>{
+  ensureWeekKey(currentWeekKey);
+  const week = store.weeks[currentWeekKey];
+  const cc = 'esuk-Complex@eonenergy.com';
+  const jobsToChase = (week.jobs||[]).filter(j=> j.status === 'pending' || j.status === 'chased');
+  if(!jobsToChase.length){ alert('No pending jobs to chase in this week.'); return; }
+  const lines = ['Hello,', '', 'Please see the list of jobs to chase:', ''];
+  jobsToChase.forEach((j,i)=>{
+    lines.push(`${i+1}. ${j.name || ''} | ${j.postcode || ''} | ${j.mpan || ''} | ${j.jobType || ''} | ${j.notes || ''}`);
+  });
+  lines.push('', 'Thanks,');
+  const body = encodeURIComponent(lines.join('\n'));
+  const subject = encodeURIComponent(`Chase All Jobs — W/C ${document.getElementById('mondayPicker').value}`);
+  const mailto = `mailto:?cc=${encodeURIComponent(cc)}&subject=${subject}&body=${body}`;
+  window.location.href = mailto;
+  jobsToChase.forEach(j=>{ j.status = 'chased'; j.chasedTick = true; });
+  saveStore(); renderJobsSummary(); renderJobsAC();
+});
+
+/* ---------- SAVE BUTTON ---------- */
+document.getElementById('saveBtn').addEventListener('click', ()=>{
+  saveStore();
+  alert('Saved.');
+});
+
+/* ---------- INIT ---------- */
+function init(){
+  loadStore();
+
+// --- CLEAN OLD OBJECT / JSON STRING / NULL CELLS ---
+cleanOldCellObjects();
+
+function cleanOldCellObjects() {
+    if (!store.weeks) return;
+
+    for (const wk in store.weeks) {
+        const w = store.weeks[wk];
+        if (!w.engineerCells) continue;
+
+        for (const key in w.engineerCells) {
+            let v = w.engineerCells[key];
+
+            // 1) If null or undefined → empty
+            if (v == null) {
+                w.engineerCells[key] = "";
+                continue;
+            }
+
+            // 2) If object → convert to text
+            if (typeof v === "object") {
+                w.engineerCells[key] = v.text || "";
+                continue;
+            }
+
+            // 3) If literal JSON string → clean it
+            const bad1 = `{"text":"","bg":"","color":"","comment":""}`;
+            if (typeof v === "string" && v.trim() === bad1) {
+                w.engineerCells[key] = "";
+                continue;
+            }
+
+            // 4) If any future bad format appears → clean it
+            const jsonPattern = /^\{.*\"text\".*\}$/;
+            if (typeof v === "string" && jsonPattern.test(v.trim())) {
+                try {
+                    const obj = JSON.parse(v);
+                    w.engineerCells[key] = obj.text || "";
+                } catch {
+                    w.engineerCells[key] = "";
+                }
+            }
+        }
+    }
+    saveStore();
+}
+
+
+  if(!store.masterEngineers) store = JSON.parse(JSON.stringify(DEFAULT));
+  currentMonday = startOfMonday(new Date());
+  currentWeekKey = isoDate(currentMonday);
+  ensureWeekKey(currentWeekKey);
+  renderDatesRow();
+  setupColors();
+  renderAdminEngineers();
+  renderStreams();
+  renderEngineersTable();
+  renderJobsSummary();
+  renderJobsAC();
+  renderNotesTab();
+  populateJobFormSelects();
+renderRotaEngineersList();
+  document.getElementById('main').classList.remove('hidden');
+}
+// Load existing store data
+loadStore();
+
+// Populate streams list and dropdown on page load
+renderStreams();
+updatePlannedAreaDropdown();
+
+// Part 2: add the sortDropdownOptions() function here, **after** the above lines
+function sortDropdownOptions() {
+  const select = document.getElementById('filterPlannedArea');
+  const options = Array.from(select.options);
+
+  // Save the first option ("(All)") separately
+  const allOption = options.shift();
+
+  // Sort remaining options alphabetically by text
+  options.sort((a, b) => a.text.localeCompare(b.text));
+
+  // Clear the dropdown and add options back, with "(All)" at the top
+  select.innerHTML = '';
+  select.appendChild(allOption);
+  options.forEach(opt => select.appendChild(opt));
+}
+
+// Then, your init() call
+init();
+
+// Event listener for "Add" button
+document.getElementById('addStream').addEventListener('click', () => {
+  const input = document.getElementById('newStream');
+  const newStream = input.value.trim();
+  if (newStream && !store.masterStreams.includes(newStream)) {
+    store.masterStreams.push(newStream);
+    saveStore();
+    renderStreams();
+    updatePlannedAreaDropdown();
+    input.value = '';
+  } else {
+    alert('Please enter a new planned area that is not duplicate.');
+  }
+});
+
+// Function to render streams list
+function renderStreams() {
+  const ul = document.getElementById('streamsList');
+  ul.innerHTML = '';
+  store.masterStreams.forEach((s, i) => {
+    const li = document.createElement('li');
+    li.textContent = s + ' ';
+    const rem = document.createElement('button');
+    rem.className = 'smallBtn';
+    rem.textContent = 'Remove';
+    rem.onclick = () => {
+      if (confirm('Remove stream?')) {
+        store.masterStreams.splice(i, 1);
+        Object.keys(store.weeks).forEach(k => {
+          const idx = store.weeks[k].streams.indexOf(s);
+          if (idx > -1) store.weeks[k].streams.splice(idx, 1);
+        });
+        saveStore();
+        renderStreams();
+        updatePlannedAreaDropdown();
+      }
+    };
+    li.appendChild(rem);
+    ul.appendChild(li);
+  });
+}
+
+// Function to update the dropdown options
+function updatePlannedAreaDropdown() {
+  const select = document.getElementById('filterPlannedArea');
+  select.innerHTML = '<option value="">(All)</option><option value="az">A–Z</option>';
+
+  // Add options from store.masterStreams
+  store.masterStreams.slice().sort().forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    select.appendChild(opt);
+  });
+
+  // Now sort all options alphabetically except the first (All)
+  sortDropdownOptions();
+}
+
+
+// Call update on initial load
+updatePlannedAreaDropdown();
+
+
+// Make sure the function is defined somewhere before this
+function removeEngineerColumnAndDataByName(engineerName) {
+  // --- (include the full function code I provided earlier) ---
+  const nameLower = engineerName.toLowerCase();
+
+  // Remove from master list
+  store.masterEngineers = store.masterEngineers.filter(e => e.name.toLowerCase() !== nameLower);
+
+  // Remove from all weeks
+  Object.keys(store.weeks).forEach(weekKey => {
+    store.weeks[weekKey].engineers = store.weeks[weekKey].engineers.filter(e => e.name.toLowerCase() !== nameLower);
+  });
+
+  // Remove the column from the table DOM
+  const table = document.getElementById('mainTable');
+  if (!table) return;
+
+  const headerRow = table.tHead ? table.tHead.rows[0] : null;
+  const bodyRows = Array.from(table.tBodies[0].rows);
+  if (!headerRow) return;
+
+  const colsToRemove = [];
+  Array.from(headerRow.cells).forEach((cell, index) => {
+    if (cell.innerText && cell.innerText.toLowerCase().includes(engineerName.toLowerCase())) {
+      colsToRemove.push(index);
+    }
+  });
+
+  colsToRemove.sort((a, b) => b - a);
+  colsToRemove.forEach(colIdx => {
+    headerRow.deleteCell(colIdx);
+    bodyRows.forEach(row => {
+      if (row.cells.length > colIdx) row.deleteCell(colIdx);
+    });
+  });
+
+  saveStore();
+  renderEngineersTable();
+  renderNotesTab();
+
+  console.log(`Removed engineer "${engineerName}" from data and DOM.`);
+}
+
+function renderRotaEngineersList() {
+  const container = document.getElementById('rotaEngineersList');
+  container.innerHTML = '';
+
+  store.masterEngineers.forEach(engineer => {
+    // Create a row for each engineer
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'engineer-row';
+
+    // Engineer name on the left
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'engineer-name';
+    nameDiv.textContent = engineer.name;
+
+    // Container for 4 boxes
+    const boxesContainer = document.createElement('div');
+
+    // Generate 4 boxes
+    for (let i = 0; i < 4; i++) {
+      const box = document.createElement('div');
+      box.className = 'engineer-box';
+      // Optional: add event handlers or styles here
+      boxesContainer.appendChild(box);
+    }
+
+    // Append name and boxes to the row
+    rowDiv.appendChild(nameDiv);
+    rowDiv.appendChild(boxesContainer);
+
+    // Append the row to the main container
+    container.appendChild(rowDiv);
+  });
+}
+
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const box1 = document.getElementById('dateBox1');
+    const box2 = document.getElementById('dateBox2');
+    const box3 = document.getElementById('dateBox3');
+    const box4 = document.getElementById('dateBox4');
+    const box5 = document.getElementById('dateBox5');
+    const box6 = document.getElementById('dateBox6');
+    const box7 = document.getElementById('dateBox7');
+    const box8 = document.getElementById('dateBox8');
+    const box9 = document.getElementById('dateBox9');
+    const box10 = document.getElementById('dateBox10');
+    const box11 = document.getElementById('dateBox11');
+    const box12 = document.getElementById('dateBox12');
+    const box13 = document.getElementById('dateBox13');
+    const box14 = document.getElementById('dateBox14');
+    const box15 = document.getElementById('dateBox15');
+    const box16 = document.getElementById('dateBox16');
+
+    box1.addEventListener('input', function() {
+      const dateStr = this.value.trim();
+      const dateParts = dateStr.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      
+      if (!dateParts) {
+        // Invalid format, clear all boxes
+        box2.value = '';
+        box3.value = '';
+        box4.value = '';
+        box5.value = '';
+        box6.value = '';
+        box7.value = '';
+        box8.value = '';
+        box9.value = '';
+        box10.value = '';
+        box11.value = '';
+        box12.value = '';
+        box13.value = '';
+        box14.value = '';
+        box15.value = '';
+        box16.value = '';
+        return;
+      }
+
+      const day = parseInt(dateParts[1], 10);
+      const month = parseInt(dateParts[2], 10) - 1;
+      const year = parseInt(dateParts[3], 10);
+      const dateObj = new Date(year, month, day);
+
+      if (isNaN(dateObj.getTime())) {
+        // Invalid date
+        box2.value = '';
+        box3.value = '';
+        box4.value = '';
+        box5.value = '';
+        box6.value = '';
+        box7.value = '';
+        box8.value = '';
+        box9.value = '';
+        box10.value = '';
+        box11.value = '';
+        box12.value = '';
+        box13.value = '';
+        box14.value = '';
+        box15.value = '';
+        box16.value = '';
+        return;
+      }
+
+      function addDays(date, days) {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + days);
+        return newDate;
+      }
+
+      function formatDate(date) {
+        const d = ('0' + date.getDate()).slice(-2);
+        const m = ('0' + (date.getMonth() + 1)).slice(-2);
+        const y = date.getFullYear();
+        return `${d}/${m}/${y}`;
+      }
+
+      // Set the dates
+      const date1 = dateObj; // initial manual date
+      const date2 = addDays(date1, 1);
+      const date3 = addDays(date2, 1);
+      const date4 = addDays(date3, 1);
+      const date5 = addDays(date4, 3); // +3 days after box4
+      const date6 = addDays(date5, 1);
+      const date7 = addDays(date6, 1);
+      const date8 = addDays(date7, 1);
+      const date9 = addDays(date8, 3); // +3 days after box4
+      const date10 = addDays(date9, 1);
+      const date11 = addDays(date10, 1);
+      const date12 = addDays(date11, 1);
+      const date13 = addDays(date12, 3); // +3 days after box4
+      const date14 = addDays(date13, 1);
+      const date15 = addDays(date14, 1);
+      const date16 = addDays(date15, 1);
+
+      // Assign to boxes
+      box2.value = formatDate(date2);
+      box3.value = formatDate(date3);
+      box4.value = formatDate(date4);
+      box5.value = formatDate(date5);
+      box6.value = formatDate(date6);
+      box7.value = formatDate(date7);
+      box8.value = formatDate(date8);
+      box9.value = formatDate(date9);
+      box10.value = formatDate(date10);
+      box11.value = formatDate(date11);
+      box12.value = formatDate(date12);
+      box13.value = formatDate(date13);
+      box14.value = formatDate(date14);
+      box15.value = formatDate(date16);
+      box16.value = formatDate(date16);
+    });
+  });
+
+
+// Function to remove a row when clicking "Remove"
+function removeRow(button) {
+  const row = button.closest('tr');
+  row.remove();
+}
+
+
+// Function to add a row to the No Availability table
+function addNoAvailabilityRow({
+    Id,
+    MPXN,
+    Postcode,
+    EngineerGroup,
+    CapacityGroup,
+    JobType,
+    ApptDate,
+    TimeSlot,
+    CreatedDate,
+    BookedByUser,
+    CustomerAddress,
+    CustomerName,
+    AllocatedStartTime,
+    Comments,
+    Status,
+    RequestedEnergisationStatus,
+    RequestedSSC,
+    SpecificCapacityOnApptDate,
+    DateCapacityLastUpdated
+}) {
+    const tbody = document.getElementById("noAvailabilityTableBody");
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td>${escapeHtml(Id || "")}</td>
+        <td>${escapeHtml(MPXN || "")}</td>
+        <td>${escapeHtml(Postcode || "")}</td>
+        <td>${escapeHtml(EngineerGroup || "")}</td>
+        <td>${escapeHtml(CapacityGroup || "")}</td>
+        <td>${escapeHtml(JobType || "")}</td>
+        <td>${escapeHtml(typeof ApptDate === 'number' ? new Date((ApptDate - 25569) * 86400 * 1000).toLocaleDateString('en-GB') : (ApptDate || ""))}</td>
+        <td>${escapeHtml(TimeSlot || "")}</td>
+        <td>${escapeHtml(typeof CreatedDate === 'number' ? new Date((CreatedDate - 25569) * 86400 * 1000).toLocaleDateString('en-GB') : (CreatedDate || ""))}</td>
+        <td>${escapeHtml(BookedByUser || "")}</td>
+        <td>${escapeHtml(CustomerAddress || "")}</td>
+        <td>${escapeHtml(CustomerName || "")}</td>
+        <td>${escapeHtml(AllocatedStartTime || "")}</td>
+        <td>${escapeHtml(Comments || "")}</td>
+        <td>${escapeHtml(Status || "")}</td>
+        <td>${escapeHtml(RequestedEnergisationStatus || "")}</td>
+        <td>${escapeHtml(RequestedSSC || "")}</td>
+        <td>${escapeHtml(SpecificCapacityOnApptDate || "")}</td>
+        <td>${escapeHtml(typeof DateCapacityLastUpdated === 'number' ? new Date((DateCapacityLastUpdated - 25569) * 86400 * 1000).toLocaleDateString('en-GB') : (DateCapacityLastUpdated || ""))}</td>
+        <td><button class="fileBtnLike" onclick="this.closest('tr').remove()">Remove</button>`;
+
+    tbody.appendChild(tr);
+}
+
+/* -------------------------------
+   NO AVAILABILITY – FOLDER & FILE IMPORT
+-------------------------------- */
+
+const folderInput = document.getElementById("folderInput");
+const selectFolderBtn = document.getElementById("selectFolderBtn");
+const fileDropdown = document.getElementById("fileDropdown");
+const noAvailabilityTableBody = document.getElementById("noAvailabilityTableBody");
+
+let folderFiles = [];
+
+// CLICK "Select Folder"
+selectFolderBtn.addEventListener("click", () => {
+    folderInput.click();
+});
+
+// WHEN USER SELECTS A FOLDER
+folderInput.addEventListener("change", (event) => {
+    folderFiles = Array.from(event.target.files)
+        .filter(file => file.name.endsWith(".xlsx") || file.name.endsWith(".xls"));
+
+    // Refresh dropdown
+    fileDropdown.innerHTML = '<option value="">Select a file</option>';
+
+    folderFiles.forEach((file, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = file.name;
+        fileDropdown.appendChild(option);
+    });
+});
+
+// WHEN USER SELECTS A FILE IN THE DROPDOWN
+fileDropdown.addEventListener("change", () => {
+    const selected = fileDropdown.value;
+    if (selected === "") return;
+
+    const file = folderFiles[selected];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+        // Clear previous rows
+        noAvailabilityTableBody.innerHTML = "";
+
+        // Add rows using your built-in function
+        jsonData.forEach(row => addNoAvailabilityRow(row));
+    };
+
+    reader.readAsArrayBuffer(file);
+});
+
+// SINGLE IMPORT BUTTON
+document.getElementById("availabilityExcelBtn").addEventListener("click", () => {
+    const input = document.getElementById("excelFileNA");
+    const file = input.files[0];
+    if (!file) return alert("Please select a file first.");
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+        noAvailabilityTableBody.innerHTML = "";
+        jsonData.forEach(row => addNoAvailabilityRow(row));
+    };
+
+    reader.readAsArrayBuffer(file);
+});
+
+// Search filtering script
+const searchInput = document.getElementById('searchInput');
+const tableBody = document.getElementById('noAvailabilityTableBody');
+
+if (searchInput && tableBody) {
+  searchInput.addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+
+    Array.from(tableBody.rows).forEach(row => {
+      const rowText = Array.from(row.cells)
+        .map(cell => cell.innerText.toLowerCase())
+        .join(' ');
+
+      row.style.display = rowText.includes(query) ? '' : 'none';
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Engineer multi-select click-to-toggle (no CTRL needed)
+  const engineerSelect = document.getElementById("engineerFilter");
+  if (engineerSelect) {
+    engineerSelect.addEventListener("mousedown", function (e) {
+      e.preventDefault();
+
+      const option = e.target;
+      if (option.tagName !== "OPTION") return;
+
+      option.selected = !option.selected;
+
+      // update table immediately
+      applyFilters();
+    });
+  }
+
+
+// ===============================
+// IMPORT VL (SAFE / ISOLATED)
+// ===============================
+const importVLBtn = document.getElementById("importExcelVLBtn");
+const vlFileInput = document.getElementById("excelFileVLInput");
+
+if (importVLBtn && vlFileInput) {
+  importVLBtn.addEventListener("click", () => {
+
+    if (!vlFileInput.files.length) {
+      alert("Please choose an Excel file first.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+      
+      VL_STATE.allRows = rows;
+      VL_STATE.filteredRows = rows;
+      VLData = VL_STATE.allRows;
+      VL_STATE.page = 0;
+      renderVLPage();
+      updateVLPageLabel();
+      alert("Excel file loaded successfully. " + rows.length + " rows imported.");
+};
+
+    reader.readAsArrayBuffer(vlFileInput.files[0]);
+  });
+}
+
+// Save VL Data Button (works with VL_STATE OR VLData)
+const saveVLDataBtn = document.getElementById("saveVLDataBtn");
+if (saveVLDataBtn) {
+  saveVLDataBtn.addEventListener("click", () => {
+
+    const dataToSave =
+      (window.VL_STATE && Array.isArray(VL_STATE.allRows) && VL_STATE.allRows.length > 0)
+        ? VL_STATE.allRows
+        : (Array.isArray(VLData) ? VLData : []);
+
+    if (dataToSave.length === 0) {
+      alert("No data to save. Please import data first.");
+      return;
+    }
+
+    localStorage.setItem("VLData", JSON.stringify(dataToSave));
+
+    // ✅ message box
+    alert(`✅ File saved (${dataToSave.length} rows).`);
+  });
+}
+
+
+  // Export VL Data Button
+  const exportVLDataBtn = document.getElementById("exportVLDataBtn");
+  if (exportVLDataBtn) {
+    exportVLDataBtn.addEventListener("click", () => {
+      if (VLData.length === 0) {
+        alert("No data to export. Please import data first.");
+        return;
+      }
+      
+      // Create worksheet from VLData
+      const exportData = (window.VL_STATE && Array.isArray(VL_STATE.allRows) && VL_STATE.allRows.length) ? VL_STATE.allRows : VLData;
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "VL Data");
+      
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, "-");
+      const filename = `VL_Data_Export_${timestamp}.xlsx`;
+      
+      // Download the file
+      XLSX.writeFile(wb, filename);
+      alert(`Data exported successfully as ${filename}`);
+    });
+  }
+
+// Email Selected Engineers
+
+});
+</script>
+
+
+<script>
+let capacityMirror = null;
+
+async function loadCapacityMirror() {
+  const response = await fetch(
+    "PASTE_THE_LINK_TO_capacity.json_HERE"
+  );
+  capacityMirror = await response.json();
+}
+
+document.addEventListener("DOMContentLoaded", loadCapacityMirror);
+</script>
+
+<script>
+/* ===== IMPORT VL STATE ===== */
+const VL_STATE = {
+  allRows: [],        // full dataset from Excel
+  filteredRows: [],  // after search
+  pageSize: 100,
+  page: 0
+};
+</script>
+
+
+
+<!-- ===============================
+     WORK ISSUE INSTRUCTIONS MODAL
+     =============================== -->
+<div id="workIssueInstructionsModal" style="
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+">
+  <div style="
+    background:#fff;
+    width:min(760px, 92vw);
+    max-height:82vh;
+    overflow:auto;
+    border-radius:10px;
+    border:1px solid #e6ecf1;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    padding:16px 16px 12px 16px;
+  ">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+      <h3 style="margin:0;font-size:16px;">Work Issue — How to Import the Latest Import VL</h3>
+      <button id="workIssueInstructionsCloseX" type="button" class="fileBtnLike" style="padding:4px 10px;">Close</button>
+    </div>
+
+    <div style="margin-top:12px; font-size:13px; color:#0f1720; line-height:1.45;">
+      <p style="margin:0 0 10px 0;">
+        This page imports a <strong>local Excel/CSV file</strong>. For the fastest import, set your <strong>From</strong> and <strong>To</strong> dates first. SharePoint/Teams files must be <strong>downloaded</strong> or <strong>synced</strong> to your PC first.
+      </p>
+
+      <h4 style="margin:12px 0 6px 0;font-size:14px;">Option A — Fastest (recommended): Sync Steve’s folder to your PC</h4>
+      <ol style="margin:0 0 10px 18px;">
+        <li>Click <strong>Open Steve’s folder</strong>.</li>
+        <li>In SharePoint, click <strong>Add shortcut to OneDrive</strong> (or <strong>Sync</strong>).</li>
+        <li>Wait a minute for OneDrive to sync.</li>
+        <li>On this Work Issue page: click <strong>Choose file</strong> and select <strong>Import_VL_Master.xlsx</strong> from your OneDrive/SharePoint synced folder.</li>
+        <li>Click <strong>Import</strong>.</li>
+      </ol>
+
+      <h4 style="margin:12px 0 6px 0;font-size:14px;">Option B — One-off: Download the latest file, then import</h4>
+      <ol style="margin:0 0 10px 18px;">
+        <li>Click <strong>Open Import VL Master</strong>.</li>
+        <li>In Excel Online: <strong>File → Save a copy</strong> (or <strong>Download a copy</strong>).</li>
+        <li>Save it to your Desktop (or a known folder).</li>
+        <li>Back here: click <strong>Choose file</strong>, select the downloaded Excel file, then click <strong>Import</strong>.</li>
+      </ol>
+
+      <h4 style="margin:12px 0 6px 0;font-size:14px;">Before Import (important)</h4>
+      <ul style="margin:0 0 10px 18px;">
+        <li>Set <strong>From</strong> and <strong>To</strong> dates first to import only the rows you need.</li>
+      </ul>
+
+      <h4 style="margin:12px 0 6px 0;font-size:14px;">After Import</h4>
+      <ul style="margin:0 0 10px 18px;">
+        <li>Use the <strong>Engineer</strong> dropdown and <strong>Date filters</strong> to narrow the list.</li>
+        <li>The email preview uses the imported data as a <strong>snapshot</strong> (latest at time of import).</li>
+      </ul>
+
+      <p style="margin:10px 0 0 0; font-size:12px; color:#556;">
+        Tip: If import is slow, create an <strong>Engineer_Snapshot</strong> view (only the 7 columns needed) and export it as <strong>CSV</strong> — CSV imports much faster.
+      </p>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; margin-top:12px;">
+      <button id="workIssueInstructionsClose" type="button" class="fileBtnLike">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  const btn = document.getElementById("workIssueInstructionsBtn");
+  const modal = document.getElementById("workIssueInstructionsModal");
+  const close1 = document.getElementById("workIssueInstructionsClose");
+  const close2 = document.getElementById("workIssueInstructionsCloseX");
+
+  if (!btn || !modal) return;
+
+  function openModal() { modal.style.display = "flex"; }
+  function closeModal() { modal.style.display = "none"; }
+
+  btn.addEventListener("click", openModal);
+  if (close1) close1.addEventListener("click", closeModal);
+  if (close2) close2.addEventListener("click", closeModal);
+
+  modal.addEventListener("click", function(e) {
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") closeModal();
+  });
+})();
+</script>
+
+<script>
+// Notes: auto-load notes when date range changes + instructions modal
+document.addEventListener("DOMContentLoaded", () => {
+  const fromEl = document.getElementById("notesFrom");
+  const toEl = document.getElementById("notesTo");
+  const loadBtn = document.getElementById("notesLoadRangeBtn");
+
+  // Auto-load when both dates are set (debounced so it doesn't fire mid-change)
+  let t = null;
+  function tryAutoLoad() {
+    if (!fromEl || !toEl || !loadBtn) return;
+    if (!fromEl.value || !toEl.value) return;
+    clearTimeout(t);
+    t = setTimeout(() => {
+      // Only trigger if range is valid or app handles ordering itself
+      // auto-load handled without button
+    }, 150);
+  }
+
+  if (fromEl) fromEl.addEventListener("change", tryAutoLoad);
+  if (toEl) toEl.addEventListener("change", tryAutoLoad);
+
+  // Instructions modal
+  const helpBtn = document.getElementById("notesHelpBtn");
+  const modal = document.getElementById("notesHelpModal");
+  const closeBtn = document.getElementById("closeNotesHelp");
+
+  if (helpBtn && modal && closeBtn) {
+    helpBtn.onclick = () => (modal.style.display = "block");
+    closeBtn.onclick = () => (modal.style.display = "none");
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    };
+  }
+});
+</script>
+
+</body>
+</html>

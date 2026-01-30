@@ -219,8 +219,12 @@ section.hidden #adminFixedBar {
     <input id="mondayPicker" type="date" aria-label="Pick Monday" />
     <button id="nextWeek" class="fileBtnLike" title="Next week">&rarr;</button>
     <div style="padding-left:10px;font-weight:600" id="wcLabel"></div>
+<div id="weekModeBadge" style="padding-left:10px;font-weight:700;"></div>
+
     <div class="controlsRight" style="margin-left:12px">
-      <button id="saveBtn" class="fileBtnLike" title="Save now">Save</button>
+      <button id="publisherModeBtn" class="fileBtnLike" title="Enable Publisher Mode (PIN)">Publisher Mode: OFF</button>
+<button id="publishWeekBtn" class="fileBtnLike" title="Download this week as JSON (upload to /weeks/)">Publish Week</button>
+<button id="saveBtn" class="fileBtnLike" title="Save now">Save</button>
       <button id="chaseAllBtn" class="fileBtnLike" title="Chase all pending jobs">Chase All</button>
     </div>
   </div>
@@ -2096,6 +2100,91 @@ const DEFAULT = {
 };
 let store = {};
 function loadStore(){ try{ const s=localStorage.getItem(STORAGE_KEY); store = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT)); }catch(e){ console.error(e); store = JSON.parse(JSON.stringify(DEFAULT)); } }
+
+/* ===============================
+   PUBLISHED WEEKS (SAFE)
+   ===============================
+   This adds:
+   - Publisher Mode (PIN on this device)
+   - Publish Week (downloads YYYY-MM-DD.json)
+   It DOES NOT change your existing data model or rendering.
+   (No auto-loading, no read-only locking — keeps everything stable.)
+*/
+const PUBLISHED_WEEK_DIR = "weeks";
+const PUBLISHER_PIN_KEY = "handover_publisher_pin_v1";
+const PUBLISHER_MODE_KEY = "handover_publisher_mode_v1";
+let publisherModeEnabled = (localStorage.getItem(PUBLISHER_MODE_KEY) === "1");
+
+function setWeekBadge(text){
+  const b = document.getElementById("weekModeBadge");
+  if (b) b.textContent = text || "";
+}
+function updatePublisherUI(){
+  const btn = document.getElementById("publisherModeBtn");
+  const pub = document.getElementById("publishWeekBtn");
+  if (btn) btn.textContent = publisherModeEnabled ? "Publisher Mode: ON" : "Publisher Mode: OFF";
+  if (pub) pub.disabled = !publisherModeEnabled;
+  setWeekBadge(publisherModeEnabled ? "DRAFT (PUBLISHER)" : "DRAFT");
+}
+function enablePublisherModeFlow(){
+  const existing = localStorage.getItem(PUBLISHER_PIN_KEY);
+  if (!existing){
+    const pin = prompt("Set a Publisher PIN (min 4 chars). You can share it with someone if you're on holiday.");
+    if (!pin || pin.trim().length < 4){ alert("PIN must be at least 4 characters."); return; }
+    localStorage.setItem(PUBLISHER_PIN_KEY, pin.trim());
+  }
+  const entered = prompt("Enter Publisher PIN:");
+  const current = localStorage.getItem(PUBLISHER_PIN_KEY) || "";
+  if ((entered||"").trim() !== current){ alert("Incorrect PIN."); return; }
+  publisherModeEnabled = true;
+  localStorage.setItem(PUBLISHER_MODE_KEY, "1");
+  updatePublisherUI();
+}
+function disablePublisherMode(){
+  publisherModeEnabled = false;
+  localStorage.setItem(PUBLISHER_MODE_KEY, "0");
+  updatePublisherUI();
+}
+function downloadJson(filename, obj){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+function publishCurrentWeek(){
+  if (!publisherModeEnabled){ alert("Enable Publisher Mode first."); return; }
+  if (!window.currentWeekKey){ alert("Pick a W/C date first."); return; }
+  const wk = window.currentWeekKey;
+  const payload = (window.store && store.weeks && store.weeks[wk]) ? store.weeks[wk] : {};
+  downloadJson(`${wk}.json`, payload);
+  alert(
+    "Downloaded " + wk + ".json\n\n" +
+    "Upload it to your GitHub repo under /weeks/ as:\n" +
+    "/weeks/" + wk + ".json\n\n" +
+    "This is for sharing/viewing other weeks later."
+  );
+}
+function wirePublisherButtons(){
+  const btn = document.getElementById("publisherModeBtn");
+  const pub = document.getElementById("publishWeekBtn");
+  if (btn){
+    btn.addEventListener("click", ()=>{
+      if (publisherModeEnabled){
+        if (confirm("Turn OFF Publisher Mode?")) disablePublisherMode();
+      } else {
+        enablePublisherModeFlow();
+      }
+    });
+  }
+  if (pub){
+    pub.addEventListener("click", publishCurrentWeek);
+  }
+  updatePublisherUI();
+}
+
 function saveStore(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
 
 /* ---------- DATES & WEEKS ---------- */
